@@ -1,0 +1,3 @@
+<launch>
+    <node name="xplane_wrapper" pkg="xplane_ros" type="xplane_ros_wrapper.py" output="screen" />
+</launch>

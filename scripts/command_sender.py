@@ -7,7 +7,6 @@ class CommandSender():
     def __init__(self):
         self.client =  xpc.XPlaneConnect()
 
-        #self.poseSub =  rospy.Subscriber("/xplane/sim/flightmodel/odom", xplane_msgs.Position, self.poseCallback)
         # Listen on the topic for an control commands from the user
         self.controlSub =  rospy.Subscriber("/xplane/my_control", xplane_msgs.Controls, self.controlCallback)
 
@@ -18,7 +17,7 @@ class CommandSender():
     
     def controlCallback(self, msg):
         # send the user's control commands to XPlane 
-        ctrl = [msg.elevator, msg.aileron, msg.rudder, msg.throttle]
         if msg is not None:
+            ctrl = [msg.elevator, msg.aileron, msg.rudder, msg.throttle]
             self.client.sendCTRL(ctrl)
         
