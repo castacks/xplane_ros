@@ -2,57 +2,59 @@ import xpc.xpc as xpc
 
 import rospy
 import xplane_ros.msg as xplane_msgs
+import rosplane_msgs.msg as rosplane_msgs
 
 from geometry_msgs.msg import Twist
 from geometry_msgs.msg import Pose, PoseStamped
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32
 
-import coord_transforms.transform
+#import coord_transforms.transform
 
 import numpy as np
 
 
-class Transformation:
-    def __init__(self):
-        self.R = 6378145 -200
-        self.lat_ref = None 
-        self.lon_ref = None
+# class Transformation:
+#     def __init__(self):
+#         self.R = 6378145 -200
+#         self.lat_ref = None 
+#         self.lon_ref = None
     
-    def set_reference(self, lat_ref, lon_ref):
-        self.lat_ref = lat_ref
-        self.lon_ref = lon_ref
-        print(lat_ref)
-        print(lon_ref)
+#     def set_reference(self, lat_ref, lon_ref):
+#         self.lat_ref = lat_ref
+#         self.lon_ref = lon_ref
+#         print(lat_ref)
+#         print(lon_ref)
 
-        self.p0_w = coord_transforms.transform.sphericalToCartesian(self.R, lat_ref, lon_ref)
-        self.R_wl = coord_transforms.transform.worldToLocalMatrix(lat_ref, lon_ref)
-        self.R_lw = np.linalg.inv(self.R_wl)
+#         self.p0_w = coord_transforms.transform.sphericalToCartesian(self.R, lat_ref, lon_ref)
+#         self.R_wl = coord_transforms.transform.worldToLocalMatrix(lat_ref, lon_ref)
+#         self.R_lw = np.linalg.inv(self.R_wl)
 
     
-    def local_to_world(self, p1_l):
-        p1_w = coord_transforms.transform.pointLocalToWorld(p1_l, self.p0_w, self.R_lw)
-        return coord_transforms.transform.cartesianToSpherical(p1_w[0][0], p1_w[1][0], p1_w[2][0])
+#     def local_to_world(self, p1_l):
+#         p1_w = coord_transforms.transform.pointLocalToWorld(p1_l, self.p0_w, self.R_lw)
+#         return coord_transforms.transform.cartesianToSpherical(p1_w[0][0], p1_w[1][0], p1_w[2][0])
 
 '''Class to extract position and controls related information from XPlane '''
 class StateReader:
-    def __init__(self):
+    def __init__(self, client):
         '''instantiate connection to XPC'''
-        self.client =  xpc.XPlaneConnect()
+        #self.client =  xpc.XPlaneConnect()
+        self.client = client
 
         self.initPose = Pose()
         self.initPose.position.x = None
         self.initPose.position.y = None
         self.initPose.position.z = None
 
-        self.coordinateTransformation = Transformation()
+        # self.coordinateTransformation = Transformation()
 
         self.globalStatePub = rospy.Publisher("/xplane/flightmodel/global_state", xplane_msgs.GlobalState, queue_size = 10)
         self.odomPub = rospy.Publisher("/xplane/flightmodel/odom", Odometry, queue_size=10)
 
         self.posePub = rospy.Publisher("/xplane/flightmodel/pose", Pose, queue_size=10)
         self.velPub = rospy.Publisher("/xplane/flightmodel/velocity", Twist, queue_size=10)
-        self.statePub = rospy.Publisher("/fixedwing/xplane/state", xplane_msgs.State, queue_size=10)
+        self.statePub = rospy.Publisher("/fixedwing/xplane/state", rosplane_msgs.State, queue_size=10)
 
         self.diff_pub = rospy.Publisher("/xplane/height_diff", Float32, queue_size=10 )
         self.transformPub = rospy.Publisher("/xplane/flightmodel/my_transform", xplane_msgs.TransformedPoint, queue_size=10)
@@ -220,7 +222,7 @@ class StateReader:
 
 
         ''' rosplane state '''
-        state = xplane_msgs.State()
+        state = rosplane_msgs.State()
         state = self.get_rosplane_state(data)
 
 
@@ -240,7 +242,7 @@ class StateReader:
 
     
     def get_rosplane_state(self, data):
-        state = xplane_msgs.State()
+        state = rosplane_msgs.State()
         state.position[0] = -data[6][0]
         state.position[1] = data[4][0]
         state.position[2] = -data[5][0]
@@ -293,6 +295,6 @@ class StateReader:
         vel.linear.z = pd_dot
     
     def shift_point(self, pose, init):
-        pose.position.x = pose.position.x - init.position.x
-        pose.position.y = pose.position.y - init.position.y
-        pose.position.z = pose.position.z - init.position.z
+        pose.position.x = (pose.position.x - init.position.x)
+        pose.position.y = (pose.position.y - init.position.y)
+        pose.position.z = (pose.position.z - init.position.z)

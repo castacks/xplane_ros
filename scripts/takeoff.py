@@ -2,14 +2,15 @@
 
 import rospy 
 import xplane_ros.msg as xplane_msgs
+from nav_msgs.msg import Odometry
 
 class Takeoff:
     def __init__(self):
         self.HEIGHT = -1
-        self.poseSub =  rospy.Subscriber("/xplane/sim/flightmodel/odom", xplane_msgs.Position, self.poseCallback)
+        self.poseSub =  rospy.Subscriber("/xplane/sim/flightmodel/odom", Odometry, self.poseCallback)
         self.controlsPub = rospy.Publisher("/xplane/my_control", xplane_msgs.Controls, queue_size=10)
 
-        self.pose = xplane_msgs.Position()
+        self.pose = Odometry()
 
         self.ctrl = xplane_msgs.Controls()
         self.ctrl.aileron = -998
