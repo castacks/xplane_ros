@@ -1,4 +1,4 @@
-import xpc
+import xpc.xpc as xpc
 
 import rospy
 import xplane_ros.msg as xplane_msgs

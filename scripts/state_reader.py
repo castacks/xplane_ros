@@ -1,4 +1,4 @@
-import xpc
+import xpc.xpc as xpc
 
 import rospy
 import xplane_ros.msg as xplane_msgs
@@ -8,7 +8,33 @@ from geometry_msgs.msg import Pose, PoseStamped
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32
 
-# Class to extract position and controls related information from XPlane 
+import coord_transforms.transform
+
+import numpy as np
+
+
+class Transformation:
+    def __init__(self):
+        self.R = 6378145 -200
+        self.lat_ref = None 
+        self.lon_ref = None
+    
+    def set_reference(self, lat_ref, lon_ref):
+        self.lat_ref = lat_ref
+        self.lon_ref = lon_ref
+        print(lat_ref)
+        print(lon_ref)
+
+        self.p0_w = coord_transforms.transform.sphericalToCartesian(self.R, lat_ref, lon_ref)
+        self.R_wl = coord_transforms.transform.worldToLocalMatrix(lat_ref, lon_ref)
+        self.R_lw = np.linalg.inv(self.R_wl)
+
+    
+    def local_to_world(self, p1_l):
+        p1_w = coord_transforms.transform.pointLocalToWorld(p1_l, self.p0_w, self.R_lw)
+        return coord_transforms.transform.cartesianToSpherical(p1_w[0][0], p1_w[1][0], p1_w[2][0])
+
+'''Class to extract position and controls related information from XPlane '''
 class StateReader:
     def __init__(self):
         '''instantiate connection to XPC'''
@@ -19,15 +45,17 @@ class StateReader:
         self.initPose.position.y = None
         self.initPose.position.z = None
 
+        self.coordinateTransformation = Transformation()
 
         self.globalStatePub = rospy.Publisher("/xplane/flightmodel/global_state", xplane_msgs.GlobalState, queue_size = 10)
         self.odomPub = rospy.Publisher("/xplane/flightmodel/odom", Odometry, queue_size=10)
 
         self.posePub = rospy.Publisher("/xplane/flightmodel/pose", Pose, queue_size=10)
         self.velPub = rospy.Publisher("/xplane/flightmodel/velocity", Twist, queue_size=10)
-        self.statePub = rospy.Publisher("/xplane/flightmodel/state", xplane_msgs.State, queue_size=10)
+        self.statePub = rospy.Publisher("/fixedwing/xplane/state", xplane_msgs.State, queue_size=10)
 
         self.diff_pub = rospy.Publisher("/xplane/height_diff", Float32, queue_size=10 )
+        self.transformPub = rospy.Publisher("/xplane/flightmodel/my_transform", xplane_msgs.TransformedPoint, queue_size=10)
 
 
 
@@ -137,7 +165,7 @@ class StateReader:
             self.initPose.position.x = data[4][0]
             self.initPose.position.y = data[5][0]
             self.initPose.position.z = data[6][0]
-            self.openGLPointToNED(self.initPose)
+            self.opengl_point_to_ned(self.initPose)
 
         self.global_state = xplane_msgs.GlobalState()
         '''Additional 0 index because the data is in the form of a tuple'''
@@ -161,9 +189,26 @@ class StateReader:
         pose.orientation.z = data[23][3]
         pose.orientation.w = data[23][0]
 
+        ''' coordinate transformation ''' 
+        # if not self.coordinateTransformation.lat_ref:
+        #     self.coordinateTransformation.set_reference(data[32][0], data[33][0])
+        
+        # p1_l = np.array([[pose.position.x],
+        #                 [pose.position.y],
+        #                 [pose.position.z]])
+        # (rho, lat, lon) = self.coordinateTransformation.local_to_world(p1_l)
+
+        # transformed = xplane_msgs.TransformedPoint()
+        # transformed.lat = lat
+        # transformed.act_lat = self.global_state.latitude
+        # transformed.lon = lon
+        # transformed.act_lon = self.global_state.longitude
+        # transformed.elevation = rho - self.coordinateTransformation.R
+        # transformed.act_elevation = self.global_state.elevation
+
         ''' Convert openGL to NED frame & apply translation''' 
-        # self.openGLPointToNED(pose)
-        # self.shiftPoint(pose, self.initPose)
+        self.opengl_point_to_ned(pose)
+        self.shift_point(pose, self.initPose)
 
         velocity.linear.x = data[7][0]
         velocity.linear.y = data[8][0]
@@ -171,8 +216,7 @@ class StateReader:
         velocity.angular.x = data[19][0]
         velocity.angular.y = data[20][0]
         velocity.angular.z =  data[21][0]
-        self.openGLVelocityToNED(velocity)
-
+        self.opengl_velocity_to_ned(velocity)
 
 
         ''' rosplane state '''
@@ -192,6 +236,7 @@ class StateReader:
         self.statePub.publish(state)
 
         self.diff_pub.publish(data[5][0] - data[3][0])
+        # self.transformPub.publish(transformed)
 
     
     def get_rosplane_state(self, data):
@@ -204,26 +249,28 @@ class StateReader:
         state.alpha = data[24][0]
         state.beta = data[25][0]
 
-        state.phi = data[10][0]
-        state.theta = data[11][0]
-        state.psi =  data[12][0]
+        state.phi = data[10][0] * (np.pi/180)
+        state.theta = data[11][0] * (np.pi/180)
+        state.psi =  data[12][0] * (np.pi/180)
 
-        state.p = data[20][0]
-        state.q = data[19][0]
-        state.r = data[21][0]
+        state.p = data[20][0] * (np.pi/180)
+        state.q = data[19][0] * (np.pi/180)
+        state.r = data[21][0] * (np.pi/180)
 
         state.Vg = data[31][0]
         wind_speed = data[26][0]
-        # wn = w * -z_component
-        # we = w * x_component 
-        state.wn = wind_speed * (-data[29][0])
-        state.we = wind_speed * (data[27][0])
+        '''wn = w * -z_component
+        we = w * x_component '''
+        # state.wn = wind_speed * (-data[29][0])
+        # state.we = wind_speed * (data[27][0])
+        state.wn = 0
+        state.we = 0
 
-        state.chi = state.psi # TODO : calculate course angle
+        state.chi = state.psi + state.beta # TODO : calculate course angle ; currently assume wind velocity is 0
 
         return state
 
-    def openGLPointToNED(self, pose):
+    def opengl_point_to_ned(self, pose):
         ''' [pn,pe,pd]^T =  [0, 0, -1] [x,y,z]^T  
                             [1, 0, 0 ]
                             [0, -1, 0]   '''
@@ -234,7 +281,7 @@ class StateReader:
         pose.position.y = pe
         pose.position.z = pd
     
-    def openGLVelocityToNED(self, vel):
+    def opengl_velocity_to_ned(self, vel):
         ''' [pn,pe,pd]^T =  [0, 0, -1] [x,y,z]^T  
                             [1, 0, 0 ]
                             [0, -1, 0]   '''
@@ -245,8 +292,7 @@ class StateReader:
         vel.linear.y = pe_dot
         vel.linear.z = pd_dot
     
-    def shiftPoint(self, pose, init):
+    def shift_point(self, pose, init):
         pose.position.x = pose.position.x - init.position.x
         pose.position.y = pose.position.y - init.position.y
         pose.position.z = pose.position.z - init.position.z
-
