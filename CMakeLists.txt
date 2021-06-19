@@ -132,6 +132,7 @@ include_directories(
 catkin_install_python(PROGRAMS 
     scripts/xplane_ros_wrapper.py 
     scripts/takeoff.py
+    scripts/roll_hold.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
