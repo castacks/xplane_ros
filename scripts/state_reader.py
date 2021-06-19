@@ -243,9 +243,9 @@ class StateReader:
     
     def get_rosplane_state(self, data):
         state = rosplane_msgs.State()
-        state.position[0] = -data[6][0]
-        state.position[1] = data[4][0]
-        state.position[2] = -data[5][0]
+        state.position[0] = -data[6][0] - self.initPose.position.x
+        state.position[1] = data[4][0] - self.initPose.position.y
+        state.position[2] = -data[5][0] - self.initPose.position.z
 
         state.Va =  data[30][0]
         state.alpha = data[24][0]
