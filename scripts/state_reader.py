@@ -10,6 +10,8 @@ from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32
 
 #import coord_transforms.transform
+from geometry_msgs.msg import Quaternion
+from tf.transformations import quaternion_from_euler
 
 import numpy as np
 
@@ -207,6 +209,13 @@ class StateReader:
         # transformed.act_lon = self.global_state.longitude
         # transformed.elevation = rho - self.coordinateTransformation.R
         # transformed.act_elevation = self.global_state.elevation
+
+        ''' Quaternion test '''
+        # q = quaternion_from_euler(self.global_state.roll * np.pi/180.0, self.global_state.pitch * np.pi/180.0, self.global_state.heading * np.pi/180.0)
+        # print(q)
+        # print(pose.orientation)
+        # print("-----------------------")
+        ''' Current data seems good '''
 
         ''' Convert openGL to NED frame & apply translation''' 
         self.opengl_point_to_ned(pose)
