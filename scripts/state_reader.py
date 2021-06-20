@@ -9,33 +9,10 @@ from geometry_msgs.msg import Pose, PoseStamped
 from nav_msgs.msg import Odometry
 from std_msgs.msg import Float32
 
-#import coord_transforms.transform
 from geometry_msgs.msg import Quaternion
 from tf.transformations import quaternion_from_euler
 
 import numpy as np
-
-
-# class Transformation:
-#     def __init__(self):
-#         self.R = 6378145 -200
-#         self.lat_ref = None 
-#         self.lon_ref = None
-    
-#     def set_reference(self, lat_ref, lon_ref):
-#         self.lat_ref = lat_ref
-#         self.lon_ref = lon_ref
-#         print(lat_ref)
-#         print(lon_ref)
-
-#         self.p0_w = coord_transforms.transform.sphericalToCartesian(self.R, lat_ref, lon_ref)
-#         self.R_wl = coord_transforms.transform.worldToLocalMatrix(lat_ref, lon_ref)
-#         self.R_lw = np.linalg.inv(self.R_wl)
-
-    
-#     def local_to_world(self, p1_l):
-#         p1_w = coord_transforms.transform.pointLocalToWorld(p1_l, self.p0_w, self.R_lw)
-#         return coord_transforms.transform.cartesianToSpherical(p1_w[0][0], p1_w[1][0], p1_w[2][0])
 
 '''Class to extract position and controls related information from XPlane '''
 class StateReader:
@@ -49,8 +26,6 @@ class StateReader:
         self.initPose.position.y = None
         self.initPose.position.z = None
 
-        # self.coordinateTransformation = Transformation()
-
         self.globalStatePub = rospy.Publisher("/xplane/flightmodel/global_state", xplane_msgs.GlobalState, queue_size = 10)
         self.odomPub = rospy.Publisher("/xplane/flightmodel/odom", Odometry, queue_size=10)
 
@@ -58,7 +33,7 @@ class StateReader:
         self.velPub = rospy.Publisher("/xplane/flightmodel/velocity", Twist, queue_size=10)
         self.statePub = rospy.Publisher("/fixedwing/xplane/state", rosplane_msgs.State, queue_size=10)
 
-        self.diff_pub = rospy.Publisher("/xplane/height_diff", Float32, queue_size=10 )
+        # self.diff_pub = rospy.Publisher("/xplane/height_diff", Float32, queue_size=10 )
         self.transformPub = rospy.Publisher("/xplane/flightmodel/my_transform", xplane_msgs.TransformedPoint, queue_size=10)
 
 
@@ -193,23 +168,6 @@ class StateReader:
         pose.orientation.z = data[23][3]
         pose.orientation.w = data[23][0]
 
-        ''' coordinate transformation ''' 
-        # if not self.coordinateTransformation.lat_ref:
-        #     self.coordinateTransformation.set_reference(data[32][0], data[33][0])
-        
-        # p1_l = np.array([[pose.position.x],
-        #                 [pose.position.y],
-        #                 [pose.position.z]])
-        # (rho, lat, lon) = self.coordinateTransformation.local_to_world(p1_l)
-
-        # transformed = xplane_msgs.TransformedPoint()
-        # transformed.lat = lat
-        # transformed.act_lat = self.global_state.latitude
-        # transformed.lon = lon
-        # transformed.act_lon = self.global_state.longitude
-        # transformed.elevation = rho - self.coordinateTransformation.R
-        # transformed.act_elevation = self.global_state.elevation
-
         ''' Quaternion test '''
         # q = quaternion_from_euler(self.global_state.roll * np.pi/180.0, self.global_state.pitch * np.pi/180.0, self.global_state.heading * np.pi/180.0)
         # print(q)
@@ -246,8 +204,7 @@ class StateReader:
         self.velPub.publish(velocity)
         self.statePub.publish(state)
 
-        self.diff_pub.publish(data[5][0] - data[3][0])
-        # self.transformPub.publish(transformed)
+        # self.diff_pub.publish(data[5][0] - data[3][0])
 
     
     def get_rosplane_state(self, data):
