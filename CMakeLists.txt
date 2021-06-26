@@ -133,6 +133,8 @@ catkin_install_python(PROGRAMS
     scripts/xplane_ros_wrapper.py 
     scripts/takeoff.py
     scripts/roll_hold.py
+    scripts/ned_to_viz.py
+    scripts/rosplane_tuner.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
