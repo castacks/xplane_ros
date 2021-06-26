@@ -191,7 +191,17 @@ class StateReader:
         ''' rosplane state '''
         state = rosplane_msgs.State()
         state = self.get_rosplane_state(data)
-
+        # state.header.stamp = rospy.Time(secs=data[0][0])
+        state.header.stamp = rospy.Time.now()
+        # state.header.frame_id = "\x01"
+        state.header.frame_id = "world"
+        # state.initial_alt = 0.0
+        # state.initial_lat = 0.0
+        # state.initial_lon = 0.0
+        # state.quat_valid = False
+        # state.quat = [1.0, 0.0, 0.0, 0.0]
+        # state.chi_deg = 0.0
+        # state.psi_deg = 0.0
 
         odom.header.frame_id = '/world'
         odom.header.stamp = rospy.Time(secs=data[0][0])
