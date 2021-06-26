@@ -28,6 +28,14 @@ class CommandSender():
         
     def rosplaneControlCallback(self, msg):
         if msg is not None:
+            if msg.x < -1.0 or msg.x > 1.0:
+                msg.x = -998.0
+            if msg.y < -1.0 or msg.y > 1.0:
+                msg.y = -998.0
+            if msg.z < -1.0 or msg.z > 1.0:
+                msg.z = -998.0
+            if msg.F < 0.0 or msg.F > 1.0:
+                msg.F = -998.0
             ctrl = [msg.y,msg.x, msg.z, msg.F]
             self.client.sendCTRL(ctrl)
         
