@@ -28,13 +28,13 @@ class XPlaneRosWrapper:
 if __name__ == '__main__':
     # start the interface node
     rospy.init_node('xplane_ros_wrapper', anonymous=True)
-    client = xpc.XPlaneConnect()
-    ''' instantiate reader and sender objects '''
-    stateReader = StateReader(client)
-    commandSender = CommandSender(client)
-    
-    '''instantiate wrapper object'''
-    xplaneRosWrapper = XPlaneRosWrapper(stateReader, commandSender)
+    with xpc.XPlaneConnect(timeout=20000) as client:
+        ''' instantiate reader and sender objects '''
+        stateReader = StateReader(client)
+        commandSender = CommandSender(client)
+        
+        '''instantiate wrapper object'''
+        xplaneRosWrapper = XPlaneRosWrapper(stateReader, commandSender)
 
-    rospy.spin()
+        rospy.spin()
 
