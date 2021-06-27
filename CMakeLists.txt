@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
     geometry_msgs
     nav_msgs 
     message_generation
+    dynamic_reconfigure
     rosplane
 )
 
@@ -97,10 +98,10 @@ generate_messages(
 ##     and list every .cfg file to be processed
 
 ## Generate dynamic reconfigure parameters in the 'cfg' folder
-# generate_dynamic_reconfigure_options(
-#   cfg/DynReconf1.cfg
+generate_dynamic_reconfigure_options(
+  cfg/Commands.cfg
 #   cfg/DynReconf2.cfg
-# )
+)
 
 ###################################
 ## catkin specific configuration ##
