@@ -54,15 +54,15 @@ catkin init
 ```shell script
 cd ~/catkin_ws/src
 ```
-2. Install system dependencies: 
+2. Install system dependencies:  
 ```shell script
 sudo apt-get install python-wstool python-catkin-tools
 ```
 
 3. Download repo using a SSH key or via HTTPS: 
 ```shell script
-git clone git@github.com:rohanblueboybaijal/xplane_ros.git # SSH
-git clone https://github.com/rohanblueboybaijal/xplane_ros.git # HTTPS
+git clone git@bitbucket.org:castacks/xplane_ros.git # SSH
+git clone https://rohanblueboybaijal2702@bitbucket.org/castacks/xplane_ros.git # HTTPS
 ```
 4. Source and compile: 
 ```shell script
