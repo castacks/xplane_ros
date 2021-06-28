@@ -77,6 +77,9 @@ Add the similar command for the `rosplane` workspace incase they are not the sam
 
 
 # Running xplane_ros 
+**Pre-requisites**   
+Run the XPlane simulator and choose the Butler runway (KBTP). Start the flight. Once the aircraft has been spawned on the runway, run the follwoing commands.
+
 The `default.launch` provides the bare-minimum structure in order to interface with XPlane. The `xplane_ros_wrapper` node will provide the odometry data from XPlane and it will listen to Xplane commands from the user application on the topic `/xplane/my_control` and then send them to XPlane.
 ```shell script
 roslaunch xplane_ros default.launch
