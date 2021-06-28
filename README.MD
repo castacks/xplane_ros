@@ -41,7 +41,7 @@ This will create new .xpl files under a folder named ```XPlaneConnect``` in the 
 1. If not already done so, install [ROS](http://wiki.ros.org/ROS/Installation) (Desktop-Full is recommended).
 
 2. If not already done so, create a catkin workspace with [catkin tools](https://catkin-tools.readthedocs.io/en/latest/):
-```shell script
+```bash
 sudo apt-get install python-catkin-tools
 mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws
@@ -51,24 +51,28 @@ catkin init
 **Installation**
 
 1. Move to your catkin workspace: 
-```shell script
+```bash
 cd ~/catkin_ws/src
-```
+```  
+
 2. Install system dependencies:  
-```shell script
+```bash
 sudo apt-get install python-wstool python-catkin-tools
-```
+```  
+
 
 3. Download repo using a SSH key or via HTTPS: 
-```shell script
+```bash
 git clone git@bitbucket.org:castacks/xplane_ros.git # SSH
 git clone https://rohanblueboybaijal2702@bitbucket.org/castacks/xplane_ros.git # HTTPS
-```
+```  
+
 4. Source and compile: 
-```shell script
+```bash
 catkin build
 source ../devel/setup.bash
-```
+```  
+
 
 5. **Temporary**  
 xplane_ros will also require you to have [rosplane](https://github.com/rohanblueboybaijal/rosplane/tree/xplane/debug) installed in your local machine.   (Use the `xplane/debug` branch).  
@@ -80,36 +84,43 @@ Add the similar command for the `rosplane` workspace incase they are not the sam
 **Pre-requisites**   
 Run the XPlane simulator and choose the Butler runway (KBTP). Start the flight. Once the aircraft has been spawned on the runway, run the follwoing commands.
 
-The `default.launch` provides the bare-minimum structure in order to interface with XPlane. The `xplane_ros_wrapper` node will provide the odometry data from XPlane and it will listen to Xplane commands from the user application on the topic `/xplane/my_control` and then send them to XPlane.
-```shell script
+The `default.launch` provides the bare-minimum structure in order to interface with XPlane. The `xplane_ros_wrapper` node will provide the odometry data from XPlane and it will listen to Xplane commands from the user application on the topic `/xplane/my_control` and then send them to XPlane.  
+
+```bash
 roslaunch xplane_ros default.launch
-```
+```  
+
 The `default.launch` file also has a launch command for the rviz visualization. Uncomment that to load a `.perspective` file with a top down visualization of the odometry.
 
 
 # Running xplane_ros with ROSplane  
 ```To be changed (Assumes familiarity with rosplane)```  
-`StateReader.py` also packs data in the format needed for ROSplane and publishes that. You can run the rosplane controller along with xplane_ros by running : 
-```shell script
+`StateReader.py` also packs data in the format needed for ROSplane and publishes that. You can run the rosplane controller along with xplane_ros by running :   
+
+```bash
 roslaunch rosplane_sim fixedwing.launch
-```
+```  
+
 
 # Tuning rosplane parameters 
 We have tuned the parameters for Cessna_172 (the default aircraft in XPlane) but feel free to try it out for other aircrafts yourself.  
 
-```shell script
+```bash
 roslaunch xplane_ros default.launch
-```
+```  
+
 In a separate terminal, run :
-```shell script
+```bash
 roslaunch xplane_ros rosplane_tuner.launch
-```
+```  
+
 This will also open an `rqt` window with multiple `rqt_plot` plots.
 
 In a third terminal, run : 
-```shell script
+```bash
 rosrun rqt_reconfigure rqt_reconfigure
-```
+```  
+
 
 Under the `rqt_reconfigure gui` you should see `fixedwing` and `xplane_ros `. Click on both of them.  
 The `fixedwing` setup contains the dynamic reconfigure for `rosplane` parameters. The nomenclature should be obvious once you take a glance at the `params` and `cfg` files provided in `rosplane`. Those are the tuning parameters for the PID loops implemented in `rosplane`.    
