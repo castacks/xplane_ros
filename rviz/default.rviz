@@ -5,9 +5,6 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /Axes1
-        - /Odometry1/Shape1
       Splitter Ratio: 0.5
     Tree Height: 728
   - Class: rviz/Selection
@@ -36,7 +33,7 @@ Toolbars:
 Visualization Manager:
   Class: ""
   Displays:
-    - Alpha: 0.5
+    - Alpha: 0.10000000149011612
       Cell Size: 1
       Class: rviz/Grid
       Color: 160; 160; 164
@@ -51,7 +48,7 @@ Visualization Manager:
         Y: 0
         Z: 0
       Plane: XY
-      Plane Cell Count: 10
+      Plane Cell Count: 5000
       Reference Frame: <Fixed Frame>
       Value: true
     - Class: rviz/Axes
@@ -60,6 +57,40 @@ Visualization Manager:
       Name: Axes
       Radius: 20
       Reference Frame: <Fixed Frame>
+      Value: true
+    - Angle Tolerance: 0.15000000596046448
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 500
+      Name: Odometry
+      Position Tolerance: 50
+      Shape:
+        Alpha: 1
+        Axes Length: 40
+        Axes Radius: 10
+        Color: 255; 0; 0
+        Head Length: 20
+        Head Radius: 20
+        Shaft Length: 40
+        Shaft Radius: 5
+        Value: Arrow
+      Topic: /xplane/flightmodel/odom_viz
+      Unreliable: false
       Value: true
     - Angle Tolerance: 0.10000000149011612
       Class: rviz/Odometry
@@ -79,25 +110,67 @@ Visualization Manager:
           Value: true
         Value: true
       Enabled: true
-      Keep: 0
+      Keep: 100
       Name: Odometry
-      Position Tolerance: 5
+      Position Tolerance: 0.10000000149011612
       Shape:
         Alpha: 1
-        Axes Length: 40
-        Axes Radius: 10
-        Color: 255; 25; 200
-        Head Length: 20
-        Head Radius: 20
-        Shaft Length: 40
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 0; 0; 0
+        Head Length: 30
+        Head Radius: 30
+        Shaft Length: 100
+        Shaft Radius: 20
+        Value: Arrow
+      Topic: /fixedwing/xplane/waypoint_viz
+      Unreliable: false
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /fixedwing/xplane/waypoint_line_viz
+      Name: Marker
+      Namespaces:
+        rudimentary_waypoint_path: true
+      Queue Size: 100
+      Value: true
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: true
+      Keep: 10
+      Name: Odometry
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 255; 255; 0
+        Head Length: 200
+        Head Radius: 50
+        Shaft Length: 500
         Shaft Radius: 10
-        Value: Axes
-      Topic: /xplane/flightmodel/odom_viz
+        Value: Arrow
+      Topic: /xplane/flightmodel/initial_odom_viz
       Unreliable: false
       Value: true
   Enabled: true
   Global Options:
-    Background Color: 48; 48; 48
+    Background Color: 255; 255; 255
     Default Light: true
     Fixed Frame: world
     Frame Rate: 30
@@ -122,7 +195,7 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: 0
+      Angle: -1.5700000524520874
       Class: rviz/TopDownOrtho
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
@@ -132,11 +205,11 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 0.09744519740343094
+      Scale: 0.13318368792533875
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
-      X: 240.28094482421875
-      Y: 572.9197387695312
+      X: 509.4169921875
+      Y: 1341.8218994140625
     Saved: ~
 Window Geometry:
   Displays:
