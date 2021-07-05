@@ -26,11 +26,13 @@ class StateReader:
         self.initPose.position.y = None
         self.initPose.position.z = None
 
+        # Publish global state consisting of GlobalState msg (Latitutde Longitude instead of openGL coordinates)
         self.globalStatePub = rospy.Publisher("/xplane/flightmodel/global_state", xplane_msgs.GlobalState, queue_size = 10)
-        self.odomPub = rospy.Publisher("/xplane/flightmodel/odom", Odometry, queue_size=10)
+        self.odomPub = rospy.Publisher("/xplane/flightmodel/odom", Odometry, queue_size=10)      # Odometry is also being provided in the NED format : XYZ <-> NED
 
-        self.posePub = rospy.Publisher("/xplane/flightmodel/pose", Pose, queue_size=10)
-        self.velPub = rospy.Publisher("/xplane/flightmodel/velocity", Twist, queue_size=10)
+        # self.posePub = rospy.Publisher("/xplane/flightmodel/pose", Pose, queue_size=10)
+        # self.velPub = rospy.Publisher("/xplane/flightmodel/velocity", Twist, queue_size=10)
+        '''Publisher for data in rosplane format'''
         self.statePub = rospy.Publisher("/fixedwing/xplane/state", rosplane_msgs.State, queue_size=10)
 
         # self.diff_pub = rospy.Publisher("/xplane/height_diff", Float32, queue_size=10 )
@@ -140,13 +142,14 @@ class StateReader:
         #print(data[8][0], data[34][0])
         #print(data[34][0])
 
+        '''Set initial position so that this vector can be subtracted from subsequent local positions (Centre the frame)'''
         if (not self.initPose.position.x):
             self.initPose.position.x = data[4][0]
             self.initPose.position.y = data[5][0]
             self.initPose.position.z = data[6][0]
             self.opengl_point_to_ned(self.initPose)
 
-        self.global_state = xplane_msgs.GlobalState()
+        self.global_state = xplane_msgs.GlobalState() # Global coordinate information
         '''Additional 0 index because the data is in the form of a tuple'''
         self.global_state.latitude = data[1][0]
         self.global_state.longitude = data[2][0]
@@ -160,7 +163,8 @@ class StateReader:
         velocity = Twist() # velocity in local coordinates
         odom = Odometry()
 
-        pose.position.x = data[4][0]
+        '''pose and orientation in openGL coordinates. However, the angle convention is still NED so no change required there'''
+        pose.position.x = data[4][0] 
         pose.position.y = data[5][0]
         pose.position.z = data[6][0]
         pose.orientation.x = data[23][1]
@@ -175,16 +179,16 @@ class StateReader:
         # print("-----------------------")
         ''' Current data seems good '''
 
-        ''' Convert openGL to NED frame & apply translation''' 
+        ''' Convert openGL (East Up South) to NED frame & apply translation''' 
         self.opengl_point_to_ned(pose)
         self.shift_point(pose, self.initPose)
-
-        velocity.linear.x = data[7][0]
-        velocity.linear.y = data[8][0]
-        velocity.linear.z = data[9][0]
-        velocity.angular.x = data[19][0]
-        velocity.angular.y = data[20][0]
-        velocity.angular.z =  data[21][0]
+        '''Although linear velocities must be transformed but it seems like XPlane provides Attitude rates according to conventional NED format'''
+        velocity.linear.x = data[7][0]    # pn_dot
+        velocity.linear.y = data[8][0]    # pe_dot
+        velocity.linear.z = data[9][0]    # pd_dot
+        velocity.angular.x = data[20][0]  # Roll rate
+        velocity.angular.y = data[19][0]  # Pitch rate
+        velocity.angular.z =  data[21][0] # Yaw rate
         self.opengl_velocity_to_ned(velocity)
 
 
@@ -204,17 +208,19 @@ class StateReader:
         # state.psi_deg = 0.0
 
         odom.header.frame_id = '/world'
+        '''TODO : In order to be able to plot on rqt with other data, we should instead use Time.now()'''
         odom.header.stamp = rospy.Time(secs=data[0][0])
         odom.pose.pose = pose
         odom.twist.twist = velocity
 
         self.globalStatePub.publish(self.global_state)
         self.odomPub.publish(odom)
-        self.posePub.publish(pose)
-        self.velPub.publish(velocity)
+        # self.posePub.publish(pose)
+        # self.velPub.publish(velocity)
         self.statePub.publish(state)
 
         # self.diff_pub.publish(data[5][0] - data[3][0])
+        '''TODO : local_vx, vy, vz don't seem to give a magnitude equal to airspeed. It could be Vg instead ; investigate this'''
 
     
     def get_rosplane_state(self, data):
@@ -224,27 +230,38 @@ class StateReader:
         state.position[2] = -data[5][0] - self.initPose.position.z
 
         state.Va =  data[30][0]
-        state.alpha = data[24][0]
-        state.beta = data[25][0]
+        state.alpha = data[24][0] * (np.pi / 180.0)
+        state.beta = data[25][0] * (np.pi / 180.0)
 
         state.phi = data[10][0] * (np.pi/180)
         state.theta = data[11][0] * (np.pi/180)
         state.psi =  data[12][0] * (np.pi/180)
 
-        state.p = data[20][0] * (np.pi/180)
-        state.q = data[19][0] * (np.pi/180)
-        state.r = data[21][0] * (np.pi/180)
+
+        state.p = data[20][0] * (np.pi/180) # roll rate in rad/s
+        state.q = data[19][0] * (np.pi/180) # pitch rate in rad/s
+        state.r = data[21][0] * (np.pi/180) # yaw rate in rad/s
 
         state.Vg = data[31][0]
         wind_speed = data[26][0]
         '''wn = w * -z_component
         we = w * x_component '''
-        # state.wn = wind_speed * (-data[29][0])
-        # state.we = wind_speed * (data[27][0])
-        state.wn = 0
-        state.we = 0
+        state.wn = wind_speed * (-data[29][0])
+        state.we = wind_speed * (data[27][0])
+        # state.wn = 0
+        # state.we = 0
 
         state.chi = state.psi + state.beta # TODO : calculate course angle ; currently assume wind velocity is 0
+        if state.chi > np.pi:
+            state.chi = state.chi - 2*np.pi
+        if state.chi < -np.pi:
+            state.chi = state.chi + 2*np.pi
+        
+        '''Wrap the course angle between -PI and PI'''
+        if state.psi > np.pi:
+            state.psi -= 2*np.pi
+        if state.psi < -np.pi:
+            state.psi += 2*np.pi
 
         return state
 
