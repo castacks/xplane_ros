@@ -82,7 +82,11 @@ Add the similar command for the `rosplane` workspace incase they are not the sam
 
 # Running xplane_ros 
 **Pre-requisites**   
-Run the XPlane simulator and choose the Butler runway (KBTP). Start the flight. Once the aircraft has been spawned on the runway, run the follwoing commands.
+1. Open X-Plane 11 (`X-Plane 11/X-Plane_x86_64`).  
+2. Select **New Flight**.  
+3. In the LOCATION panel, set the location to Butler airport (ID : KBTP).  
+4. Click **Start Flight**.  
+5. Allow the aircraft to spawn and then press `B` on the keyboard. (This is to turn off the brakes ; TODO - Add this in code during initialization).
 
 The `default.launch` provides the bare-minimum structure in order to interface with XPlane. The `xplane_ros_wrapper` node will provide the odometry data from XPlane and it will listen to Xplane commands from the user application on the topic `/xplane/my_control` and then send them to XPlane.  
 
