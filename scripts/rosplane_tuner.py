@@ -11,12 +11,15 @@ from time import sleep
 from dynamic_reconfigure.server import Server
 from xplane_ros.cfg import CommandsConfig
 
+# Initial conditions/ commands to give to the control functions
 class Options:
     def __init__(self):
-        self.hold_roll = False
-        self.hold_pitch = False
+        self.hold_roll = False                        # True if you want to invoke roll_hold() in rosplane
+        self.hold_pitch = False                       # True if you want to invoke pitch_hold() in rosplane
+        self.hold_course = False                      # True if you want to invoke course_hold() in rosplane
         self.roll_step = (np.pi/180.0) * (15)
         self.pitch_step = (np.pi/180.0) * (0)
+        self.course_step = (np.pi / 180.0) * (0.0)
 
 
 class RosplaneTuner:
@@ -40,14 +43,18 @@ class RosplaneTuner:
         '''setup server for dynamic reconfigure'''
         self.srv = Server(CommandsConfig, self.callback)
 
+        '''Publish the commanded values for roll, pitch and course'''
         self.tunerPub = rospy.Publisher("/fixedwing/tuner_commands", rosplane_msgs.Tuner_Commands, queue_size=10)
         rospy.Timer(period=rospy.Duration(0.1), callback=self.command_update)
 
         self.count = 0
+
+        '''Assuming that the aircraft is currently at the runway, this will spawn the aircraft at a height of 1000 m at the same lat, lon'''
         #       Lat     Lon   Alt   Pitch  Roll  Yaw Gear
         posi = [-998, -998, 1000,     1.0,    0.0,   0.0,  1]
         client.sendPOSI(posi)
 
+        '''Provide initial velocity to the aircraft so that it does not go straight into the ground'''
         drefs = []
         # drefs.append("sim/flightmodel/position/indicated_airspeed")
         drefs.append("sim/flightmodel/position/local_vx")
@@ -57,6 +64,7 @@ class RosplaneTuner:
         # values = [60]
         client.sendDREFs(drefs, values)
 
+        '''Provide throttle commad to maintain speed before the controllers kick in'''
         ctrl = [0.0, 0.0, 0.0, 0.8]
         client.sendCTRL(ctrl)
 
@@ -65,8 +73,12 @@ class RosplaneTuner:
         # client.pauseSim(False)
     
     def callback(self, config, level):
+        '''Setting flags'''
         self.tuner_commands.hold_roll = config.hold_roll
         self.tuner_commands.hold_pitch = config.hold_pitch
+        self.tuner_commands.hold_course =  config.hold_course
+
+        '''Commanded values'''
         self.tuner_commands.phi_c = (config.roll_step) * (np.pi / 180.0)
         self.tuner_commands.theta_c = (config.pitch_step) * (np.pi / 180.0)
         self.tuner_commands.Va_c = (config.Va_c)
