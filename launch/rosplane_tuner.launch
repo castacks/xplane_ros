@@ -11,6 +11,6 @@
     </group>
 
     <node name="xplane_tuner" pkg="xplane_ros" type="rosplane_tuner.py" />
-    <node name = "my_rqt_dashboard" pkg = "rqt_gui" type = "rqt_gui" respawn = "false" output = "screen" args = "--perspective-file $(find xplane_ros)/rqt_config/tuner.perspective"/>
+    <node name = "my_rqt_dashboard" pkg = "rqt_gui" type = "rqt_gui" respawn = "false" output = "screen" args = "--perspective-file $(find xplane_ros)/rqt_config/tuner1.perspective"/>
 
 </launch>
