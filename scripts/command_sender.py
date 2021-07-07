@@ -9,7 +9,8 @@ class CommandSender():
     def __init__(self, client):
         #self.client =  xpc.XPlaneConnect()
         self.client = client
-
+        '''Turn off brake'''
+        self.sendBrake(0)
         # Listen on the topic for an control commands from the user
         self.controlSub =  rospy.Subscriber("/xplane/my_control", xplane_msgs.Controls, self.controlCallback)
 
@@ -38,4 +39,10 @@ class CommandSender():
                 msg.F = -998.0
             ctrl = [msg.y,msg.x, msg.z, msg.F]
             self.client.sendCTRL(ctrl)
+    
+    def sendBrake(self, brake):
+        '''Set the parking brake to on or off
+            brake: 0 - OFF; 1 - ON
+        '''
+        self.client.sendDREF("sim/flightmodel/controls/parkbrake", brake)
         
