@@ -13,6 +13,8 @@ from geometry_msgs.msg import Quaternion
 from tf.transformations import quaternion_from_euler
 
 import numpy as np
+KNOTS_TO_MS = 0.51444444444
+angle_in_deg = True
 
 '''Class to extract position and controls related information from XPlane '''
 class StateReader:
@@ -37,6 +39,7 @@ class StateReader:
 
         # self.diff_pub = rospy.Publisher("/xplane/height_diff", Float32, queue_size=10 )
         self.transformPub = rospy.Publisher("/xplane/flightmodel/my_transform", xplane_msgs.TransformedPoint, queue_size=10)
+        self.odom = Odometry()
 
 
 
@@ -191,6 +194,12 @@ class StateReader:
         velocity.angular.z =  data[21][0] # Yaw rate
         self.opengl_velocity_to_ned(velocity)
 
+        odom.header.frame_id = '/world'
+        '''TODO : In order to be able to plot on rqt with other data, we should instead use Time.now()'''
+        odom.header.stamp = rospy.Time(secs=data[0][0])
+        odom.pose.pose = pose
+        odom.twist.twist = velocity
+        self.odom = odom
 
         ''' rosplane state '''
         state = rosplane_msgs.State()
@@ -207,11 +216,6 @@ class StateReader:
         # state.chi_deg = 0.0
         # state.psi_deg = 0.0
 
-        odom.header.frame_id = '/world'
-        '''TODO : In order to be able to plot on rqt with other data, we should instead use Time.now()'''
-        odom.header.stamp = rospy.Time(secs=data[0][0])
-        odom.pose.pose = pose
-        odom.twist.twist = velocity
 
         self.globalStatePub.publish(self.global_state)
         self.odomPub.publish(odom)
@@ -229,20 +233,29 @@ class StateReader:
         state.position[1] = data[4][0] - self.initPose.position.y
         state.position[2] = -data[5][0] - self.initPose.position.z
 
-        state.Va =  data[30][0]
-        state.alpha = data[24][0] * (np.pi / 180.0)
-        state.beta = data[25][0] * (np.pi / 180.0)
+        state.Va =  data[30][0] * KNOTS_TO_MS # dataref gives airspeed in knots; need to convert it to m/s
 
-        state.phi = data[10][0] * (np.pi/180)
-        state.theta = data[11][0] * (np.pi/180)
-        state.psi =  data[12][0] * (np.pi/180)
+        '''Sending angle values in degrees or in rad'''
+        if angle_in_deg:
+            state.alpha = data[24][0]
+            state.beta = data[25][0]
 
+            state.phi = data[10][0] 
+            state.theta = data[11][0] 
+            state.psi =  data[12][0] 
+        else:
+            state.alpha = data[24][0] * (np.pi / 180.0)
+            state.beta = data[25][0] * (np.pi / 180.0)
+
+            state.phi = data[10][0] * (np.pi/180)
+            state.theta = data[11][0] * (np.pi/180)
+            state.psi =  data[12][0] * (np.pi/180)
 
         state.p = data[20][0] * (np.pi/180) # roll rate in rad/s
         state.q = data[19][0] * (np.pi/180) # pitch rate in rad/s
         state.r = data[21][0] * (np.pi/180) # yaw rate in rad/s
 
-        state.Vg = data[31][0]
+        state.Vg = data[31][0] # dataref gives groundspeed in m/s
         wind_speed = data[26][0]
         '''wn = w * -z_component
         we = w * x_component '''
@@ -251,18 +264,49 @@ class StateReader:
         # state.wn = 0
         # state.we = 0
 
-        state.chi = state.psi + state.beta # TODO : calculate course angle ; currently assume wind velocity is 0
-        if state.chi > np.pi:
-            state.chi = state.chi - 2*np.pi
-        if state.chi < -np.pi:
-            state.chi = state.chi + 2*np.pi
-        
-        '''Wrap the course angle between -PI and PI'''
-        if state.psi > np.pi:
-            state.psi -= 2*np.pi
-        if state.psi < -np.pi:
-            state.psi += 2*np.pi
+        '''Print statements to see if speed is in m/s or knots'''
+        # vx = self.odom.twist.twist.linear.x 
+        # vy = self.odom.twist.twist.linear.y 
+        # vz = self.odom.twist.twist.linear.z
+        # print("Airspeed Xplane : %f" % (state.Va))
+        # print("Airpspeed in m/s %f" % (state.Va * 0.51444444444 ))
+        # print("Self Airspeed : %f" % (np.sqrt(vx*vx + vy*vy + vz*vz)))
+        # print("Ground velocity : %f" % (state.Vg))
+        # print("Ground velocity in m/s : %f" % (state.Vg * 0.51444444444 ))
+        # print("self Groundspeed : %f" % (np.sqrt(vx*vx + vy*vy)))
+        # print("-------------------------------------")
+        '''Observations :
+        grounndspeed dataref infact gives groundspeed in m/s.
+        But airspeed is in knots.
+        sqrt(vx*vx  + vy*vy + vz*vz) = groundspeed (Shoudl've been equal to airspeed)
+        airspeed seems slightly off from sqrt(vx*vx + vy*vy + vz*vz) probably because of wind
+        '''
 
+        state.chi = state.psi + state.beta # TODO : calculate course angle ; currently assume wind velocity is 0
+        if angle_in_deg:
+            if state.chi > 180.0:
+                state.chi = state.chi - 2*180.0
+            if state.chi < -180.0:
+                state.chi = state.chi + 2*180.0
+            
+            '''Wrap the course angle between -PI and PI'''
+            if state.psi > 180.0:
+                state.psi -= 2*180.0
+            if state.psi < -180.0:
+                state.psi += 2*180.0
+        else:
+            if state.chi > np.pi:
+                state.chi = state.chi - 2*np.pi
+            if state.chi < -np.pi:
+                state.chi = state.chi + 2*np.pi
+            
+            '''Wrap the course angle between -PI and PI'''
+            if state.psi > np.pi:
+                state.psi -= 2*np.pi
+            if state.psi < -np.pi:
+                state.psi += 2*np.pi
+
+        
         return state
 
     def opengl_point_to_ned(self, pose):
