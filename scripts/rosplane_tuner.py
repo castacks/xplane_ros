@@ -79,12 +79,12 @@ class RosplaneTuner:
         self.tuner_commands.hold_course =  config.hold_course
 
         '''Commanded values'''
-        self.tuner_commands.phi_c = (config.roll_step) * (np.pi / 180.0)
-        self.tuner_commands.theta_c = (config.pitch_step) * (np.pi / 180.0)
+        self.tuner_commands.phi_c = (config.roll_step) # * (np.pi / 180.0)
+        self.tuner_commands.theta_c = (config.pitch_step) # * (np.pi / 180.0)
         self.tuner_commands.Va_c = (config.Va_c)
         self.tuner_commands.h_c = config.h_c
-        self.tuner_commands.chi_c = (config.chi_c) * (np.pi/180.0)
-        self.tuner_commands.phi_ff = (config.phi_ff) * (np.pi / 180.0)
+        self.tuner_commands.chi_c = (config.chi_c) # * (np.pi/180.0)
+        self.tuner_commands.phi_ff = (config.phi_ff) # * (np.pi / 180.0)
 
         return config
     
