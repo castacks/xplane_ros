@@ -216,6 +216,11 @@ class StateReader:
         # state.chi_deg = 0.0
         # state.psi_deg = 0.0
 
+        '''Print statements to check if local_vy can be used as vertical velocity indicator
+        vh_ms = self.client.getDREF("sim/flightmodel/position/vh_ind")[0]
+        vh_fpm = self.client.getDREF("sim/flightmodel/position/vh_ind_fpm")[0]
+        print("sensor : %f, %f, %f" % (vh_ms, -velocity.linear.z, vh_fpm*0.3048/60))'''
+
 
         self.globalStatePub.publish(self.global_state)
         self.odomPub.publish(odom)
@@ -263,6 +268,7 @@ class StateReader:
         state.we = wind_speed * (data[27][0])
         # state.wn = 0
         # state.we = 0
+        state.vh = data[8][0]
 
         '''Print statements to see if speed is in m/s or knots'''
         # vx = self.odom.twist.twist.linear.x 

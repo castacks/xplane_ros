@@ -28,10 +28,11 @@ class RosplaneTuner:
         self.tuner_commands = rosplane_msgs.Tuner_Commands()
 
         '''Parameters present in Control_Commands; not needed for now'''
-        self.tuner_commands.Va_c = 60
-        self.tuner_commands.h_c = 50
+        self.tuner_commands.Va_c = 40
+        self.tuner_commands.h_c = 800
         self.tuner_commands.chi_c = 0
         self.tuner_commands.phi_ff = 0
+        self.tuner_commands.vh_c = 0
 
         '''Parameters for tuning roll and pitch'''
         self.tuner_commands.hold_roll = self.options.hold_roll
@@ -77,6 +78,8 @@ class RosplaneTuner:
         self.tuner_commands.hold_roll = config.hold_roll
         self.tuner_commands.hold_pitch = config.hold_pitch
         self.tuner_commands.hold_course =  config.hold_course
+        self.tuner_commands.hold_altitude = config.hold_altitude
+        self.tuner_commands.hold_vh = config.hold_vh
 
         '''Commanded values'''
         self.tuner_commands.phi_c = (config.roll_step) # * (np.pi / 180.0)
@@ -85,6 +88,7 @@ class RosplaneTuner:
         self.tuner_commands.h_c = config.h_c
         self.tuner_commands.chi_c = (config.chi_c) # * (np.pi/180.0)
         self.tuner_commands.phi_ff = (config.phi_ff) # * (np.pi / 180.0)
+        self.tuner_commands.vh_c = config.vh_c
 
         return config
     
