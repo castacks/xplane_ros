@@ -5,10 +5,46 @@
       "keys": {
         "running-plugins": {
           "type": "repr",
-          "repr": "{u'rqt_plot/Plot': [3, 2, 1]}"
+          "repr": "{u'rqt_plot/Plot': [5, 4, 3, 2, 1]}"
         }
       },
       "groups": {
+        "plugin__MultiplotPlugin__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__MultiplotWidget": {
+              "keys": {
+                "dockable": {
+                  "type": "repr",
+                  "repr": "u'true'"
+                },
+                "parent": {
+                  "type": "repr",
+                  "repr": "None"
+                },
+                "dock_widget_title": {
+                  "type": "repr",
+                  "repr": "u'Multiplot - [untitled]'"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {},
+              "groups": {
+                "history": {
+                  "keys": {
+                    "max_length": {
+                      "type": "repr",
+                      "repr": "u'10'"
+                    }
+                  },
+                  "groups": {}
+                }
+              }
+            }
+          }
+        },
         "plugin__rqt_plot__Plot__1": {
           "keys": {},
           "groups": {
@@ -41,11 +77,11 @@
                 },
                 "topics": {
                   "type": "repr",
-                  "repr": "[u'/fixedwing/command/x', u'/fixedwing/xplane/state/phi', u'/fixedwing/tuner_commands/phi_c']"
+                  "repr": "[u'/fixedwing/command/x', u'/fixedwing/xplane/state/phi', u'/fixedwing/commanded_values/phi_c', u'/fixedwing/tuner_commands/phi_c']"
                 },
                 "y_limits": {
                   "type": "repr",
-                  "repr": "[-1.100000023841858, 1.0]"
+                  "repr": "[-52.53116989135742, 5.1061882972717285]"
                 },
                 "x_limits": {
                   "type": "repr",
@@ -88,11 +124,11 @@
                 },
                 "topics": {
                   "type": "repr",
-                  "repr": "[u'/fixedwing/command/y', u'/fixedwing/xplane/state/theta', u'/fixedwing/tuner_commands/theta_c']"
+                  "repr": "[u'/fixedwing/command/y', u'/fixedwing/xplane/state/theta', u'/fixedwing/tuner_commands/theta_c', u'/fixedwing/commanded_values/theta_c']"
                 },
                 "y_limits": {
                   "type": "repr",
-                  "repr": "[-1.100000023841858, 1.0]"
+                  "repr": "[-46.69418716430664, 57.295780181884766]"
                 },
                 "x_limits": {
                   "type": "repr",
@@ -127,6 +163,53 @@
               "keys": {
                 "autoscroll": {
                   "type": "repr",
+                  "repr": "False"
+                },
+                "plot_type": {
+                  "type": "repr",
+                  "repr": "1"
+                },
+                "topics": {
+                  "type": "repr",
+                  "repr": "[u'/fixedwing/command/x', u'/fixedwing/xplane/state/psi', u'/fixedwing/commanded_values/chi_c']"
+                },
+                "y_limits": {
+                  "type": "repr",
+                  "repr": "[-179.61549377441406, 179.68051147460938]"
+                },
+                "x_limits": {
+                  "type": "repr",
+                  "repr": "[0.0, 100.0]"
+                }
+              },
+              "groups": {}
+            }
+          }
+        },
+        "plugin__rqt_plot__Plot__4": {
+          "keys": {},
+          "groups": {
+            "dock_widget__DataPlotWidget": {
+              "keys": {
+                "dockable": {
+                  "type": "repr",
+                  "repr": "True"
+                },
+                "parent": {
+                  "type": "repr",
+                  "repr": "None"
+                },
+                "dock_widget_title": {
+                  "type": "repr",
+                  "repr": "u'MatPlot (4)'"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {
+                "autoscroll": {
+                  "type": "repr",
                   "repr": "True"
                 },
                 "plot_type": {
@@ -135,11 +218,11 @@
                 },
                 "topics": {
                   "type": "repr",
-                  "repr": "[u'/fixedwing/command/x', u'/fixedwing/xplane/state/psi', u'/fixedwing/tuner_commands/chi_c']"
+                  "repr": "[u'/fixedwing/xplane/state/position[2]', u'/fixedwing/commanded_values/h_c']"
                 },
                 "y_limits": {
                   "type": "repr",
-                  "repr": "[-1.100000023841858, 6.283133029937744]"
+                  "repr": "[-1003.3203735351562, 1.0]"
                 },
                 "x_limits": {
                   "type": "repr",
@@ -150,14 +233,14 @@
             }
           }
         },
-        "plugin__MultiplotPlugin__1": {
+        "plugin__rqt_plot__Plot__5": {
           "keys": {},
           "groups": {
-            "dock_widget__MultiplotWidget": {
+            "dock_widget__DataPlotWidget": {
               "keys": {
                 "dockable": {
                   "type": "repr",
-                  "repr": "u'true'"
+                  "repr": "True"
                 },
                 "parent": {
                   "type": "repr",
@@ -165,24 +248,35 @@
                 },
                 "dock_widget_title": {
                   "type": "repr",
-                  "repr": "u'Multiplot - [untitled]'"
+                  "repr": "u'MatPlot (5)'"
                 }
               },
               "groups": {}
             },
             "plugin": {
-              "keys": {},
-              "groups": {
-                "history": {
-                  "keys": {
-                    "max_length": {
-                      "type": "repr",
-                      "repr": "u'10'"
-                    }
-                  },
-                  "groups": {}
+              "keys": {
+                "autoscroll": {
+                  "type": "repr",
+                  "repr": "True"
+                },
+                "plot_type": {
+                  "type": "repr",
+                  "repr": "1"
+                },
+                "topics": {
+                  "type": "repr",
+                  "repr": "[u'/fixedwing/xplane/state/vh', u'/fixedwing/commanded_values/vh_c']"
+                },
+                "y_limits": {
+                  "type": "repr",
+                  "repr": "[-9.894608497619629, 7.990947246551514]"
+                },
+                "x_limits": {
+                  "type": "repr",
+                  "repr": "[0.0, 1.0]"
                 }
-              }
+              },
+              "groups": {}
             }
           }
         }
@@ -192,13 +286,13 @@
       "keys": {
         "geometry": {
           "type": "repr(QByteArray.hex)",
-          "repr(QByteArray.hex)": "QtCore.QByteArray('01d9d0cb00020000000000600000006b000005cc0000037f0000006000000089000005cc0000037f00000000000000000780')",
-          "pretty-print": "     ` k     `           "
+          "repr(QByteArray.hex)": "QtCore.QByteArray('01d9d0cb00020000000000ae000001f40000083d000003e0000000ae000002120000083d000003e000000000000000000780')",
+          "pretty-print": "         =       =       "
         },
         "state": {
           "type": "repr(QByteArray.hex)",
-          "repr(QByteArray.hex)": "QtCore.QByteArray('000000ff00000000fd00000001000000030000056d000002cbfc0100000004fb00000046004d0075006c007400690070006c006f00740050006c007500670069006e005f005f0031005f005f004d0075006c007400690070006c006f007400570069006400670065007401000000000000073d0000000000000000fb00000042007200710074005f0070006c006f0074005f005f0050006c006f0074005f005f0031005f005f00440061007400610050006c006f00740057006900640067006500740100000000000001db0000000000000000fb00000042007200710074005f0070006c006f0074005f005f0050006c006f0074005f005f0032005f005f00440061007400610050006c006f007400570069006400670065007401000001e1000001c20000000000000000fb00000042007200710074005f0070006c006f0074005f005f0050006c006f0074005f005f0033005f005f00440061007400610050006c006f007400570069006400670065007401000003a9000001c40000000000000000000000000000000000000004000000040000000800000008fc00000001000000030000000100000036004d0069006e0069006d0069007a006500640044006f0063006b00570069006400670065007400730054006f006f006c0062006100720000000000ffffffff0000000000000000')",
-          "pretty-print": "                 FMultiplotPlugin__1__MultiplotWidget          Brqt_plot__Plot__1__DataPlotWidget          Brqt_plot__Plot__2__DataPlotWidget          Brqt_plot__Plot__3__DataPlotWidget                            6MinimizedDockWidgetsToolbar        "
+          "repr(QByteArray.hex)": "QtCore.QByteArray('000000ff00000000fd000000010000000300000790000001a3fc0100000006fb00000046004d0075006c007400690070006c006f00740050006c007500670069006e005f005f0031005f005f004d0075006c007400690070006c006f007400570069006400670065007401000000000000073d0000000000000000fb00000042007200710074005f0070006c006f0074005f005f0050006c006f0074005f005f0031005f005f00440061007400610050006c006f007400570069006400670065007401000000000000015c0000000000000000fb00000042007200710074005f0070006c006f0074005f005f0050006c006f0074005f005f0032005f005f00440061007400610050006c006f00740057006900640067006500740100000162000001590000000000000000fb00000042007200710074005f0070006c006f0074005f005f0050006c006f0074005f005f0033005f005f00440061007400610050006c006f007400570069006400670065007401000002c10000015f0000000000000000fb00000042007200710074005f0070006c006f0074005f005f0050006c006f0074005f005f0034005f005f00440061007400610050006c006f007400570069006400670065007401000004260000017e0000000000000000fb00000042007200710074005f0070006c006f0074005f005f0050006c006f0074005f005f0035005f005f00440061007400610050006c006f007400570069006400670065007401000005aa000001e60000000000000000000000000000000000000004000000040000000800000008fc00000001000000030000000100000036004d0069006e0069006d0069007a006500640044006f0063006b00570069006400670065007400730054006f006f006c0062006100720000000000ffffffff0000000000000000')",
+          "pretty-print": "                 FMultiplotPlugin__1__MultiplotWidget          Brqt_plot__Plot__1__DataPlotWidget          Brqt_plot__Plot__2__DataPlotWidget          Brqt_plot__Plot__3__DataPlotWidget          Brqt_plot__Plot__4__DataPlotWidget          Brqt_plot__Plot__5__DataPlotWidget                            6MinimizedDockWidgetsToolbar        "
         }
       },
       "groups": {
