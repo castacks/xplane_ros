@@ -34,7 +34,9 @@ Go to ```XPlaneConnect/xpcPlugin```
 ```cmake --build .```  
 This will create new .xpl files under a folder named ```XPlaneConnect``` in the `build` directory. Use that for XPlane instead of the pre-built binaries
 
-# Setting up xplane_ros  
+# Setting up xplane_ros 
+
+**Please note : The current setup has been tested with ROS-Melodic, Ubuntu 18.04, XPlane-11.**
 
 **Prerequisites**
 
