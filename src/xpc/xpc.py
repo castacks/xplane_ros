@@ -1,3 +1,8 @@
+'''
+This code is taken from NASA's XPlaneConnect which actually provides a nice way to interface with XPlane. The Python2 version has been kept here for convenience.
+To check out the inner workings in depth and some sample codes, head over to https://github.com/nasa/XPlaneConnect
+'''
+
 import socket
 import struct
 
