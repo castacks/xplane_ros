@@ -85,8 +85,7 @@ source ../devel/setup.bash
 ```  
 
 
-5. **Temporary**  
-xplane_ros will also require you to have [rosplane](https://github.com/byu-magicc/rosplane) installed in your local machine.   (Use the [xplane/main](https://bitbucket.org/castacks/rosplane/src/85e8b590c02e03bfe2679235775a28d9c9b2607c/?at=xplane%2Fmain) branch).  
+5. xplane_ros will also require you to have [rosplane](https://github.com/byu-magicc/rosplane) installed in your local machine.   (Use the [xplane/main](https://bitbucket.org/castacks/rosplane/src/85e8b590c02e03bfe2679235775a28d9c9b2607c/?at=xplane%2Fmain) branch).  
 Add `source ~/catkin_ws/devel/setup.bash` in your `.bashrc` file.   
 Add the similar command for the `rosplane` workspace incase they are not the same.
 
