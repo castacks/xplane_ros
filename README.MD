@@ -1,9 +1,12 @@
-# xplane_ros
-**xplane_ros** is a ROS wrapper for the XPlane-11 flight simulator. The wrapper provides functionality for extracting aircraft data from the simulator and feeding control commands to control the aircraft in the simulator.   
+# XPlaneROS
+![First View](images/scenic_view.png) 
+
+
+**XPlaneROS** is a ROS wrapper for the XPlane-11 flight simulator. The wrapper provides functionality for extracting aircraft data from the simulator and feeding control commands to control the aircraft in the simulator.   
 The main advantage here is due to the fact that XPlane is a realistic simulator and thereby provides more realistic dynamics, responses and images.  
   
 
-`xplane_ros` interfaces with XPlane simulator using the [XPlaneConnect](https://github.com/nasa/XPlaneConnect) plugin.
+`XPlaneROS` interfaces with XPlane simulator using the [XPlaneConnect](https://github.com/nasa/XPlaneConnect) plugin.
 
 # XPlane-11
 Install the XPlane-11 simulator.
@@ -34,9 +37,15 @@ Go to ```XPlaneConnect/xpcPlugin```
 ```cmake --build .```  
 This will create new .xpl files under a folder named ```XPlaneConnect``` in the `build` directory. Use that for XPlane instead of the pre-built binaries
 
-# Setting up xplane_ros 
+# Compatibility 
+XPlaneROS has been tested with the following systems/versions :
+```bash
+Ubuntu 18.04 
+ROS-Melodic
+XPlane-11
+```
 
-**Please note : The current setup has been tested with ROS-Melodic, Ubuntu 18.04, XPlane-11.**
+# Setting up XPlaneROS 
 
 **Prerequisites**
 
@@ -77,7 +86,7 @@ source ../devel/setup.bash
 
 
 5. **Temporary**  
-xplane_ros will also require you to have [rosplane](https://github.com/rohanblueboybaijal/rosplane/tree/xplane/debug) installed in your local machine.   (Use the `xplane/debug` branch).  
+xplane_ros will also require you to have [rosplane](https://github.com/byu-magicc/rosplane) installed in your local machine.   (Use the [xplane/main](https://bitbucket.org/castacks/rosplane/src/85e8b590c02e03bfe2679235775a28d9c9b2607c/?at=xplane%2Fmain) branch).  
 Add `source ~/catkin_ws/devel/setup.bash` in your `.bashrc` file.   
 Add the similar command for the `rosplane` workspace incase they are not the same.
 
@@ -99,14 +108,25 @@ roslaunch xplane_ros default.launch
 The `default.launch` file also has a launch command for the rviz visualization. Uncomment that to load a `.perspective` file with a top down visualization of the odometry.
 
 
-# Running xplane_ros with ROSplane  
-```To be changed (Assumes familiarity with rosplane)```  
+# Running XPlaneROS with ROSplane  
+```(Assumes familiarity with rosplane)```  
 `StateReader.py` also packs data in the format needed for ROSplane and publishes that. You can run the rosplane controller along with xplane_ros by running :   
 
 ```bash
 roslaunch rosplane_sim fixedwing.launch
 ```  
 
+In case you want to try tuning some of the control loops while following the pattern, open a third terminal and run the following command :
+
+```bash
+rosrun rqt_reconfigure rqt_reconfigure
+```
+
+Press the `Refresh` button incase you don't see anything. 
+After that the relevant config parameters should be visible once you click on `fixedwing/autopilot` (for PID controls) and `fixedwing/path_follower` (for vector field parameters).
+
+![TakeOff](images/simple_takeoff_PD.png)
+![Pattern](images/xplane_viz_yellow_runway.png)
 
 # Tuning rosplane parameters 
 We have tuned the parameters for Cessna_172 (the default aircraft in XPlane) but feel free to try it out for other aircrafts yourself.  
@@ -138,4 +158,3 @@ In the `rqt_plot` you will be able to visualise the **commanded roll**, **curren
 NOTE : The control surfaces correponding to the unticked boxes will be defaulted to what it was just before you unticked them. 
 
 Henceforth, you should be able to experiment with other control loops like `pitch`, `heading`, `throttle`, etc (each corresponding to a function in `controller_base.cpp` and `controller_example.cpp` in `rosplane`).   
-Functionality to come soon :)
