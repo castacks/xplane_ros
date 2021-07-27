@@ -34,11 +34,7 @@ Adding a utility to tune the PID parameters seemed to make the task easier for u
 First start a new flight.   
 Then run   
 ```bash 
-roslaunch xplane_ros rosplane_tuner.launch
-```
-In a separate terminal run 
-```bash
-rosrun rqt_reconfigure rqt_reconfigure
+roslaunch xplane_ros default.launch rosplane_tuner:=true
 ```
 
 This will spawn the aircraft at the same latitude and longitude but at a height. It will also give an initial velocity to the aircraft along with throttle so that it stays reasonably stable and you can then start trying various parameters.  
@@ -56,9 +52,9 @@ rosplane has additional control loops like `airspeed_with_pitch_hold` etc. For t
 
 Run
 ```bash
-roslaunch rosplane_sim xplane_fw.launch
+bash utils/pattern_following.sh 
 ```
-instead of `rosplane_tuner.launch`.
+as mentioned in the main README.
 
 Again, you should get a bigger `rqt` window with similar format. The waypoints commanded form a sqaure and should give you a decent chance to observe the performace of the PID controller.  
 
