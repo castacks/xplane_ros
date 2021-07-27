@@ -14,6 +14,11 @@ Install the XPlane-11 simulator.
 # Setting up XPlaneConnect
 First we need to install the XPC plugin. Follow the steps give in the [XPlaneConnect](https://github.com/nasa/XPlaneConnect) repository or in their [Getting Started](https://github.com/nasa/XPlaneConnect/wiki/Getting-Started) page.  
 
+Try to use the pre-compiled binary they provide. After following the steps mentioned in th repo, open XPlane and start a flight. If you see the plugin under the Plugin Admin, try running some of the example codes given in XPlane Connect (basicExample.py or monitorExample.py).
+
+If these are running you are good to go to the ROS related part :)  
+If not, try the fixes mentioned below :)
+
 ## XPlaneConnect Fixes
 There is a chance the plugin might not have loaded correctly. If you don't see the plugin under the Plugin Admin while running XPlane, check the `Log.txt` file in the `XPlane-11` directory.  
   
@@ -42,7 +47,7 @@ XPlaneROS has been tested with the following systems/versions :
 ```bash
 Ubuntu 18.04 
 ROS-Melodic
-XPlane-11
+XPlane-11.50
 ```
 
 # Setting up XPlaneROS 
@@ -58,6 +63,33 @@ mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws
 catkin init
 ```
+xplane_ros will also require you to have [rosplane](https://github.com/byu-magicc/rosplane) installed in your local machine.   (Use the [xplane/main](https://bitbucket.org/castacks/rosplane/src/85e8b590c02e03bfe2679235775a28d9c9b2607c/?at=xplane%2Fmain) branch).  
+
+```bash
+mkdir -p ~/rosplane_ws/src
+cd ~/rosplane_ws 
+catkin init 
+```
+
+After that run the rosplane installation steps
+```bash
+cd src
+git clone git@bitbucket.org:castacks/rosplane.git 
+git clone git@github.com:byu-magicc/rosflight_plugins.git
+git clone git@github.com:rosflight/rosflight.git
+cd rosflight/
+git submodule update --init --recursive
+```
+
+As a sanity check, try running the rosplane code once along with gazebo. 
+```bash
+catkin build
+source ~/rosplane_ws/devel/setup.bash
+roslaunch rosplane_sim fixedwing.launch
+```
+For convenience, you can add the `source ~/rosplane_ws/devel/setup.bash` statement in your `~/.bashrc` file.
+
+Now! You've checked out rosplane and finally we're ready to move onto the XPlane part!
 
 **Installation**
 
@@ -85,12 +117,9 @@ source ../devel/setup.bash
 ```  
 
 
-5. xplane_ros will also require you to have [rosplane](https://github.com/byu-magicc/rosplane) installed in your local machine.   (Use the [xplane/main](https://bitbucket.org/castacks/rosplane/src/85e8b590c02e03bfe2679235775a28d9c9b2607c/?at=xplane%2Fmain) branch).  
-Add `source ~/catkin_ws/devel/setup.bash` in your `.bashrc` file.   
-Add the similar command for the `rosplane` workspace incase they are not the same.
 
 
-# Running xplane_ros 
+# Running XPlaneROS 
 **Pre-requisites**   
 1. Open X-Plane 11 (`X-Plane 11/X-Plane_x86_64`).  
 2. Select **New Flight**.  
@@ -112,17 +141,14 @@ The `default.launch` file also has a launch command for the rviz visualization. 
 `StateReader.py` also packs data in the format needed for ROSplane and publishes that. You can run the rosplane controller along with xplane_ros by running :   
 
 ```bash
-roslaunch rosplane_sim fixedwing.launch
+bash utils/pattern_following.sh
 ```  
+This will run the `default.launch` and `xplane_fw.launch` file. The plane will start the pattern following now.
 
-In case you want to try tuning some of the control loops while following the pattern, open a third terminal and run the following command :
-
-```bash
-rosrun rqt_reconfigure rqt_reconfigure
-```
+In case you want to try tuning some of the control loops while following the pattern, the rqt_reconfigure will be opened by the launch file. You caan tweak the parameters there.
 
 Press the `Refresh` button incase you don't see anything. 
-After that the relevant config parameters should be visible once you click on `fixedwing/autopilot` (for PID controls) and `fixedwing/path_follower` (for vector field parameters).
+After that the relevant config parameters should be visible once you click on `fixedwing/autopilot` (for PID controls) and `fixedwing/pathfollower` (for vector field parameters).
 
 ![TakeOff](images/simple_takeoff_PD.png)
 ![Pattern](images/xplane_viz_yellow_runway.png)
@@ -131,21 +157,8 @@ After that the relevant config parameters should be visible once you click on `f
 We have tuned the parameters for Cessna_172 (the default aircraft in XPlane) but feel free to try it out for other aircrafts yourself.  
 
 ```bash
-roslaunch xplane_ros default.launch
+roslaunch xplane_ros default.launch rosplane_tuner:=true
 ```  
-
-In a separate terminal, run :
-```bash
-roslaunch xplane_ros rosplane_tuner.launch
-```  
-
-This will also open an `rqt` window with multiple `rqt_plot` plots.
-
-In a third terminal, run : 
-```bash
-rosrun rqt_reconfigure rqt_reconfigure
-```  
-
 
 Under the `rqt_reconfigure gui` you should see `fixedwing` and `xplane_ros `. Click on both of them.  
 The `fixedwing` setup contains the dynamic reconfigure for `rosplane` parameters. The nomenclature should be obvious once you take a glance at the `params` and `cfg` files provided in `rosplane`. Those are the tuning parameters for the PID loops implemented in `rosplane`.    
