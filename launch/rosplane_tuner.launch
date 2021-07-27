@@ -12,5 +12,6 @@
 
     <node name="xplane_tuner" pkg="xplane_ros" type="rosplane_tuner.py" />
     <node name = "my_rqt_dashboard" pkg = "rqt_gui" type = "rqt_gui" respawn = "false" output = "screen" args = "--perspective-file $(find xplane_ros)/rqt_config/tuner1.perspective"/>
+    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rosplane_rqt_reconfigure" />
 
 </launch>
