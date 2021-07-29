@@ -14,6 +14,7 @@ from tf.transformations import quaternion_from_euler
 
 import numpy as np
 KNOTS_TO_MS = 0.51444444444
+MS_TO_FPM = 60.0/0.305
 angle_in_deg = True
 
 '''Class to extract position and controls related information from XPlane '''
@@ -268,7 +269,7 @@ class StateReader:
         state.we = wind_speed * (data[27][0])
         # state.wn = 0
         # state.we = 0
-        state.vh = data[8][0]
+        state.vh = data[8][0] * MS_TO_FPM 
 
         '''Print statements to see if speed is in m/s or knots'''
         # vx = self.odom.twist.twist.linear.x 
