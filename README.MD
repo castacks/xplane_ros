@@ -169,3 +169,5 @@ In the `rqt_plot` you will be able to visualise the **commanded roll**, **curren
 NOTE : The control surfaces correponding to the unticked boxes will be defaulted to what it was just before you unticked them. 
 
 Henceforth, you should be able to experiment with other control loops like `pitch`, `heading`, `throttle`, etc (each corresponding to a function in `controller_base.cpp` and `controller_example.cpp` in `rosplane`).   
+
+For some more idea about what each code does, head over [here](https://bitbucket.org/castacks/xplane_ros/src/master/scripts/).
