@@ -59,24 +59,21 @@ XPlane-11.50
 2. If not already done so, create a catkin workspace with [catkin tools](https://catkin-tools.readthedocs.io/en/latest/):
 ```bash
 sudo apt-get install python-catkin-tools
-mkdir -p ~/catkin_ws/src
-cd ~/catkin_ws
+mkdir -p ~/xplane_ros_ws/src
+cd ~/xplane_ros_ws
 catkin init
 ```
 xplane_ros will also require you to have [rosplane](https://github.com/byu-magicc/rosplane) installed in your local machine.   (Use the [xplane/main](https://bitbucket.org/castacks/rosplane/src/85e8b590c02e03bfe2679235775a28d9c9b2607c/?at=xplane%2Fmain) branch).  
 
 ```bash
-mkdir -p ~/rosplane_ws/src
-cd ~/rosplane_ws 
-catkin init 
+cd ~/xplane_ros_ws/src
 ```
 
 After that run the rosplane installation steps
 ```bash
-cd src
-git clone git@bitbucket.org:castacks/rosplane.git 
-git clone git@github.com:byu-magicc/rosflight_plugins.git
-git clone git@github.com:rosflight/rosflight.git
+git clone https://rohanblueboybaijal2702@bitbucket.org/castacks/rosplane.git 
+git clone https://github.com/byu-magicc/rosflight_plugins.git
+git clone https://github.com/rosflight/rosflight.git
 cd rosflight/
 git submodule update --init --recursive
 ```
@@ -84,10 +81,10 @@ git submodule update --init --recursive
 As a sanity check, try running the rosplane code once along with gazebo. 
 ```bash
 catkin build
-source ~/rosplane_ws/devel/setup.bash
+source ~/xplane_ros_ws/devel/setup.bash
 roslaunch rosplane_sim fixedwing.launch
 ```
-For convenience, you can add the `source ~/rosplane_ws/devel/setup.bash` statement in your `~/.bashrc` file.
+For convenience, you can add the `source ~/xplane_ros_ws/devel/setup.bash` statement in your `~/.bashrc` file.
 
 Now! You've checked out rosplane and finally we're ready to move onto the XPlane part!
 
@@ -95,7 +92,7 @@ Now! You've checked out rosplane and finally we're ready to move onto the XPlane
 
 1. Move to your catkin workspace: 
 ```bash
-cd ~/catkin_ws/src
+cd ~/xplane_ros_ws/src
 ```  
 
 2. Install system dependencies:  
@@ -113,7 +110,7 @@ git clone https://rohanblueboybaijal2702@bitbucket.org/castacks/xplane_ros.git #
 4. Source and compile: 
 ```bash
 catkin build
-source ../devel/setup.bash
+source ~/xplane_ros_ws/devel/setup.bash
 ```  
 
 
@@ -140,6 +137,7 @@ The `default.launch` file also has a launch command for the rviz visualization. 
 `StateReader.py` also packs data in the format needed for ROSplane and publishes that. You can run the rosplane controller along with xplane_ros by running :   
 
 ```bash
+cd ~/xplane_ros_ws/src/xplane_ros
 bash utils/pattern_following.sh
 ```  
 This will run the `default.launch` and `xplane_fw.launch` file. The plane will start the pattern following now.
