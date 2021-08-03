@@ -50,6 +50,16 @@ ROS-Melodic
 XPlane-11.50
 ```
 
+The specs of the system are given as follows:
+```bash
+Processor : Intel® Core™ i7-10750H CPU @ 2.60GHz × 12 
+Graphics  : GeForce GTX 1660 Ti/PCIe/SSE2
+OS Type   : 64-bit
+RAM       : 15.4 GiB
+```
+
+There's a possibility that if the system does not have enough computational power, then it can decrease the frame rate in XPlane and can lead to the system getting stuck. We noticed that the XPC interfaace crashes in that case.
+
 # Setting up XPlaneROS 
 
 **Prerequisites**
@@ -86,7 +96,8 @@ roslaunch rosplane_sim fixedwing.launch
 ```
 For convenience, you can add the `source ~/xplane_ros_ws/devel/setup.bash` statement in your `~/.bashrc` file.
 
-Now! You've checked out rosplane and finally we're ready to move onto the XPlane part!
+Now! You've checked out rosplane and finally we're ready to move onto the XPlane part!  
+You can go ahead and change the branch of rosplane from RC1.0 to xplane/main.
 
 **Installation**
 
