@@ -4,13 +4,13 @@
     <group ns="$(arg mav_name)">
         <rosparam command="load" file="$(find rosplane_sim)/params/$(arg mav_name).yaml"/>
 
-        <node name="autopilot_tuner" pkg="rosplane" type="rosplane_controller_tuner" output="screen">
+        <node name="autopilot_tuner" pkg="rosplane" type="rosplane_controller_tuner" >
             <remap from="state" to="xplane/state"/>
             <!-- <remap from="state" to="truth"/> -->
         </node>
     </group>
 
-    <node name="xplane_tuner" pkg="xplane_ros" type="rosplane_tuner.py" />
+    <node name="xplane_tuner" pkg="xplane_ros" type="rosplane_tuner.py" output="screen"/>
     <node name = "my_rqt_dashboard" pkg = "rqt_gui" type = "rqt_gui" respawn = "false" output = "screen" args = "--perspective-file $(find xplane_ros)/rqt_config/tuner1.perspective"/>
     <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rosplane_rqt_reconfigure" />
 
