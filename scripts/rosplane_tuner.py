@@ -11,6 +11,13 @@ from time import sleep
 from dynamic_reconfigure.server import Server
 from xplane_ros.cfg import CommandsConfig
 
+'''TRAJ_LIB is true => use rosplane_tuner to run pre recorded commands instead of using it as tuning utility'''
+TRAJ_LIB = True 
+ACTION_FILE = ""
+if TRAJ_LIB:
+    ACTIONS_FILE = '/home/rbaijal/ROS_WS/xplane_ros_ws/src/xplane_ros/utils/Actions210_387.txt'
+KNOTS_TO_MS = 0.51444444444
+
 # Initial conditions/ commands to give to the control functions
 class Options:
     def __init__(self):
@@ -41,14 +48,21 @@ class RosplaneTuner:
         self.tuner_commands.phi_c = 0.0
         self.tuner_commands.theta_c = 0.0
 
+        if TRAJ_LIB:
+            self.file = open(ACTIONS_FILE, 'r')
+            self.actions = self.file.readlines()
+        # print(self.actions)
+        self.count = 0
+
         '''setup server for dynamic reconfigure'''
         self.srv = Server(CommandsConfig, self.callback)
+
+        # print(lines)
 
         '''Publish the commanded values for roll, pitch and course'''
         self.tunerPub = rospy.Publisher("/fixedwing/tuner_commands", rosplane_msgs.Tuner_Commands, queue_size=10)
         rospy.Timer(period=rospy.Duration(0.1), callback=self.command_update)
 
-        self.count = 0
 
         '''Assuming that the aircraft is currently at the runway, this will spawn the aircraft at a height of 1000 m at the same lat, lon'''
         #       Lat     Lon   Alt   Pitch  Roll  Yaw Gear
@@ -61,7 +75,7 @@ class RosplaneTuner:
         drefs.append("sim/flightmodel/position/local_vx")
         drefs.append("sim/flightmodel/position/local_vy")
         drefs.append("sim/flightmodel/position/local_vz")
-        values = [0,-2,-50]
+        values = [0,-2,-40]
         # values = [60]
         client.sendDREFs(drefs, values)
 
@@ -80,6 +94,7 @@ class RosplaneTuner:
         self.tuner_commands.hold_course =  config.hold_course
         self.tuner_commands.hold_altitude = config.hold_altitude
         self.tuner_commands.hold_vh = config.hold_vh
+        self.tuner_commands.hold_va = config.hold_va
 
         '''Commanded values'''
         self.tuner_commands.phi_c = (config.roll_step) # * (np.pi / 180.0)
@@ -93,16 +108,22 @@ class RosplaneTuner:
         return config
     
     def command_update(self, event=None):
-        # self.count += 1
-        # '''Wait for 1 sec before sending step input'''
-        # if self.count > 30:
+        if TRAJ_LIB:
+            self.count += 1
+            index = int(self.count/100.0)
+            a = self.actions[0].split()
+            if(index < len(self.actions)):
+                a = self.actions[index].split()
+            print(a)
 
-        #     if self.tuner_commands.hold_roll:
-        #         self.tuner_commands.phi_c = self.options.roll_step
+            self.tuner_commands.hold_roll = True
+            self.tuner_commands.hold_vh = True
+            self.tuner_commands.hold_va = True
 
-        #     elif self.tuner_commands.hold_pitch:
-        #         self.tuner_commands.theta_c = self.options.pitch_step
-            
+            self.tuner_commands.phi_c = float(a[2])
+            self.tuner_commands.Va_c = float(a[0])*KNOTS_TO_MS
+            self.tuner_commands.vh_c = float(a[1])
+                
         self.tunerPub.publish(self.tuner_commands)
 
 
