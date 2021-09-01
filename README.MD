@@ -81,7 +81,7 @@ cd ~/xplane_ros_ws/src
 
 After that run the rosplane installation steps
 ```bash
-git clone https://rohanblueboybaijal2702@bitbucket.org/castacks/rosplane.git 
+git clone https://github.com/castacks/rosplane.git
 git clone https://github.com/byu-magicc/rosflight_plugins.git
 git clone https://github.com/rosflight/rosflight.git
 cd rosflight/
