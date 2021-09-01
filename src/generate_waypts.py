@@ -29,5 +29,10 @@ w = np.array([[-6000],
             [-200]])
 wayp = np.hstack((wayp,w))
 
-print(R @ wayp)
+w = np.array([[50],
+            [0],
+            [-10]])
+wayp = np.hstack((wayp, w))
+
+print((R @ wayp)[:, 4])
 

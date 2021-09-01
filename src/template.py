@@ -31,4 +31,3 @@ class MyFabulousFunnyNode:
         self.controller_command.Va_c = command[0]
         self.controller_command.phi_c = command[1]
         self.controller_command.vh_c = command[2]
-    
