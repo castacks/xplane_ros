@@ -114,8 +114,8 @@ sudo apt-get install python-wstool python-catkin-tools
 
 3. Download repo using a SSH key or via HTTPS: 
 ```bash
-git clone git@bitbucket.org:castacks/xplane_ros.git # SSH
-git clone https://rohanblueboybaijal2702@bitbucket.org/castacks/xplane_ros.git # HTTPS
+git clone git@github.com:castacks/xplane_ros.git # SSH
+git clone https://github.com/castacks/xplane_ros.git # HTTPS
 ```  
 
 4. Source and compile: 
