@@ -73,7 +73,7 @@ mkdir -p ~/xplane_ros_ws/src
 cd ~/xplane_ros_ws
 catkin init
 ```
-xplane_ros will also require you to have [rosplane](https://github.com/byu-magicc/rosplane) installed in your local machine.   (Use the [xplane/main](https://bitbucket.org/castacks/rosplane/src/85e8b590c02e03bfe2679235775a28d9c9b2607c/?at=xplane%2Fmain) branch).  
+xplane_ros will also require you to have [rosplane](https://github.com/byu-magicc/rosplane) installed in your local machine.   (Use the [xplane/main](https://github.com/castacks/rosplane/tree/xplane/main) branch).  
 
 ```bash
 cd ~/xplane_ros_ws/src
