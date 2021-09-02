@@ -6,7 +6,7 @@
 The main advantage is due to the fact that XPlane is a realistic simulator and thereby provides more realistic dynamics, responses and images.  
   
 
-`XPlaneROS` interfaces with XPlane simulator using the [XPlaneConnect](https://github.com/nasa/XPlaneConnect) plugin.
+XPlaneROS interfaces with XPlane simulator using the [XPlaneConnect](https://github.com/nasa/XPlaneConnect) plugin.
 
 # Compatibility 
 XPlaneROS has been tested with the following systems/versions :
