@@ -153,6 +153,24 @@ The `default.launch` provides the bare-minimum structure in order to interface w
 
 The `default.launch` file also has a launch command for the rviz visualization. Uncomment that to load a `.perspective` file with a top down visualization of the odometry.
 
+## Troubleshooting XPlaneROS
+Here we provide solutions for some issues you might encounter.   
+1. eigen-stl-containers are missing :
+```bash
+sudo apt install ros-melodic-eigen-stl-containers
+```
+
+2. Build error which says CMAKE path does not have 'rosplane'
+```bash
+catkin build --continue-on-failure
+```
+You might have to run this command twice 
+
+3. module export error related to python
+If you're running it on Melodic using Python2.7, then try to modify the shebang in xplane_ros with this : 
+```bash
+#! /usr/bin/env python2.7
+```
 
 # Running XPlaneROS with ROSplane  
 ```(Assumes familiarity with ROSplane)```  
