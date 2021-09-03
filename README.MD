@@ -187,8 +187,12 @@ In case you want to try tuning some of the control loops while following the pat
 Press the `Refresh` button incase you don't see anything. 
 After that the relevant config parameters should be visible once you click on `fixedwing/autopilot` (for PID controls) and `fixedwing/pathfollower` (for vector field parameters).
 
-![TakeOff](images/simple_takeoff_PD.png)
-![Pattern](images/xplane_viz_yellow_runway.png)
+<!-- ![TakeOff](images/simple_takeoff_PD.png) -->
+<img src="https://github.com/castacks/xplane_ros/blob/main/images/simple_takeoff_PD.png" alt="Takeoff"
+	title="Takeoff" width="50%"/> 
+<!-- ![Pattern](images/xplane_viz_yellow_runway.png) -->
+<img src="https://github.com/castacks/xplane_ros/blob/main/images/xplane_viz_yellow_runway.png" alt="Pattern"
+	title="Pattern" width="50%"/> 
 
 # Tuning ROSplane Parameters 
 We have tuned the parameters for Cessna_172 (the default aircraft in XPlane) but feel free to try it out for other aircraft yourself.  
