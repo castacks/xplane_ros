@@ -28,7 +28,7 @@ RAM       : 15.4 GiB
 There's a possibility that if the system does not have enough computational power, then it can decrease the frame rate in XPlane and can lead to the system getting stuck. We noticed that the XPC interface crashes in that case.
 
 # Setup 
-There are three main components needed to run XPlaneRos: Xplane-11, XPlaneConnect, ROSplane, and XPlaneROS. 
+There are three main components needed to run XPlaneRos: Xplane-11, XPlaneConnect, and [ROSplane](https://github.com/byu-magicc/rosplane). 
 
 ## XPlane-11 Setup
 Install the XPlane-11 simulator.
