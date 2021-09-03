@@ -93,7 +93,7 @@ cd rosflight/
 git submodule update --init --recursive
 ```
 
-As a sanity check, try building running the rosplane code once along with gazebo (you may also need to install eigen_stl_containers with `sudo apt-get install ros-melodic-eigen-stl-containers`). 
+As a sanity check, try building running the ROSplane code once along with gazebo (you may also need to install eigen_stl_containers with `sudo apt-get install ros-melodic-eigen-stl-containers`). 
 ```bash
 catkin build
 source ~/xplane_ros_ws/devel/setup.bash
@@ -103,7 +103,7 @@ Once Gazebo launches, you can press the "play" button in the bottom left corner,
 
 For convenience, you can add the `source ~/xplane_ros_ws/devel/setup.bash` statement in your `~/.bashrc` file.
 
-Now! You've checked out rosplane and finally we're ready to move onto XPlaneROS!  
+Now! You've checked out ROSplane and finally we're ready to move onto XPlaneROS!  
 
 ## XPlaneROS Setup
 
@@ -155,8 +155,8 @@ The `default.launch` file also has a launch command for the rviz visualization. 
 
 
 # Running XPlaneROS with ROSplane  
-```(Assumes familiarity with rosplane)```  
-`StateReader.py` also packs data in the format needed for ROSplane and publishes that. You can run the rosplane controller along with xplane_ros by running :   
+```(Assumes familiarity with ROSplane)```  
+`StateReader.py` also packs data in the format needed for ROSplane and publishes that. You can run the ROSplane controller along with xplane_ros by running :   
 
 ```bash
 cd ~/xplane_ros_ws/src/xplane_ros
