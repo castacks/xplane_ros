@@ -213,3 +213,16 @@ NOTE : The control surfaces correponding to the unticked boxes will be defaulted
 Henceforth, you should be able to experiment with other control loops like `pitch`, `heading`, `throttle`, etc (each corresponding to a function in `controller_base.cpp` and `controller_example.cpp` in `rosplane`).   
 
 For some more idea about what each code does, head over [here](https://bitbucket.org/castacks/xplane_ros/src/master/scripts/).
+
+# Citation
+```
+@misc{baijal_patrikar_moon_scherer_oh_2021,
+  title={XPlaneROS : ROS Wrapper for Autonomous Fixed Wing Applications},
+  url={https://kilthub.cmu.edu/articles/software/XPlaneROS_ROS_Wrapper_for_Autonomous_Fixed_Wing_Applications/16589924},  
+  publisher={Carnegie Mellon University},
+  author={Baijal, Rohan and Patrikar, Jay and Moon, Brady and Scherer, Sebastian and Oh, Jean},
+  year={2021},
+  month={Sep},
+  DOI={10.1184/R1/16589924}
+}
+```
