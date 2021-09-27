@@ -32,7 +32,7 @@ class Takeoff:
                 self.ctrl.throttle = 0.0
             self.ctrl.throttle = min(1.0, self.ctrl.throttle + 0.01)
             if (i>50): 
-                self.ctrl.elevator = min(0.6, self.ctrl.elevator + 0.1)
+                self.ctrl.elevator = 0.1 # min(0.6, self.ctrl.elevator + 0.1)
             self.controlsPub.publish(self.ctrl)
             print("In takeoff()", i)
             rospy.sleep(0.1)

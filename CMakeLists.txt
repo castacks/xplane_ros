@@ -137,6 +137,8 @@ catkin_install_python(PROGRAMS
     scripts/ned_to_viz.py
     scripts/rosplane_tuner.py
     scripts/rosplane_path_viz.py
+    src/ai_commands.py
+
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

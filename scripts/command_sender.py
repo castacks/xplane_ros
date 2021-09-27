@@ -28,6 +28,8 @@ class CommandSender():
             self.client.sendCTRL(ctrl)
         
     def rosplaneControlCallback(self, msg):
+        # posi = [40.77465057373047,-79.95907592773438, 381.69171142578125, 0,    0,  90,  1]
+        # self.client.sendPOSI(posi, 1)
         if msg is not None:
             if msg.x < -1.0 or msg.x > 1.0:
                 msg.x = -998.0
@@ -44,5 +46,6 @@ class CommandSender():
         '''Set the parking brake to on or off
             brake: 0 - OFF; 1 - ON
         '''
+        print("Brakes Off!!")
         self.client.sendDREF("sim/flightmodel/controls/parkbrake", brake)
         
