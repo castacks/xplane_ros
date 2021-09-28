@@ -9,7 +9,7 @@ from traj_x.traj_x import TrajX as TrajX
 from utils import read_traffic_file, to_local_runway_frame
 
 class AICNode:
-    def __init__(self,plot=True):
+    def __init__(self,plot=True, traffic_path=None):
         '''Helper functions for easy conversions of trajectory library to commands'''
         self.trajX = TrajX()
 
@@ -25,21 +25,28 @@ class AICNode:
         '''Publisher for controller commands'''
         self.controller_pub = rospy.Publisher("/fixedwing/ai_controller_commands", rosplane_msgs.Controller_Commands, queue_size=10)
 
-        self.read_traffic()
-
+        '''Publisher for traffic'''
+        self.traffic_pub = rospy.Publisher("/fixedwing/adsb_traffic", xplane_msgs.Traffic, queue_size=10)
+        self.traffic = xplane_msgs.Traffic()
+        
         self.plot = plot
 
-    def read_traffic(self):
+        self.plot_counter = 0
+        
+        self.got_traffic = False
+        if traffic_path is not None:
+            self.read_traffic(traffic_path)
+            self.got_traffic = True
 
-        path ='/home/jay/xplane_ros_ws/src/xplane_ros/utils/304.txt'
 
-        read_traffic_file(path)
+    def read_traffic(self,path):
+
+        self.traffic_data, self.ownship = read_traffic_file(path)
 
 
     def pose_callback(self, msg):
         self.vehicle_state = msg
-        global counter
-        if counter%10 ==0 and self.plot:
+        if self.plot_counter%10 ==0 and self.plot:
             x,y = to_local_runway_frame(msg.latitude,msg.longitude)
             plt.plot(x,y,'*',color='r')
             plt.scatter(0,0,color='k')
@@ -49,7 +56,7 @@ class AICNode:
             plt.draw()
             plt.pause(0.000001)
             
-        counter +=1
+        self.plot_counter +=1 
 
     def motion_primitive_command(self, index):
         '''conversion of trajectory library motion primitive to Controller_Command format'''
@@ -63,9 +70,11 @@ class AICNode:
         '''send custom commands for debug'''
         print("Sending Custom Commands")
         rate = rospy.Rate(1)
-        now = rospy.get_time()
+        self.start_time = rospy.get_time()
         while not rospy.is_shutdown():
-            if rospy.get_time() - now < 20:
+            if self.got_traffic:
+                self.send_traffic()
+            if rospy.get_time() - self.start_time < 20:
                 self.motion_primitive_command(0)
             else:
                 self.motion_primitive_command(119)
@@ -74,6 +83,16 @@ class AICNode:
             self.controller_pub.publish(self.controller_command)
             rate.sleep()
 
+    def send_traffic(self):
+        '''send traffic'''
+        rate = rospy.Rate(1)
+        while not rospy.is_shutdown():
+            curr_traffic = self.traffic_data[int(rospy.get_time() - self.start_time)]
+            print(curr_traffic)
+            # self.traffic.lat = 
+            # self.traffic_pub.publish()
+            
+
     def send_ground_truth_commands(self):
         pass
 
@@ -81,10 +100,11 @@ class AICNode:
 
 
 if __name__ == '__main__':
-    counter = 0
     rospy.init_node('ai_commands', anonymous=True)
     print("AI Commands Initiated")
-    aicnode = AICNode()
+    path ='/home/jay/xplane_ros_ws/src/xplane_ros/utils/304.txt'
+
+    aicnode = AICNode(traffic_path = path)
     aicnode.send_custom_commands()
    
     plt.ion()

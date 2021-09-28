@@ -39,8 +39,8 @@ def read_traffic_file(path):
     # df_pruned.index = df_pruned["Frame"]
     # df_pruned = df_pruned.drop(columns = ["Frame"])
     data_dict = df_based.set_index('ID').groupby('Frame').apply(lambda x: x.to_dict('index')).to_dict()
-    print(data_dict[122].keys())
-    return data_dict
+    # print(data_dict[122])
+    return data_dict, ownship_id
 
 
     
