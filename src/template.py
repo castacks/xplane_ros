@@ -1,5 +1,6 @@
+ #!/usr/bin/env python3
 import rospy 
-
+import torch
 import rosplane_msgs.msg as rosplane_msgs
 
 from traj_x.traj_x import TrajX as TrajX
@@ -31,3 +32,18 @@ class MyFabulousFunnyNode:
         self.controller_command.Va_c = command[0]
         self.controller_command.phi_c = command[1]
         self.controller_command.vh_c = command[2]
+    
+    def send_random_commands(self):
+        print("Sending Random Commands")
+        rate = rospy.Rate(10)
+        self.motion_primitive_command(1)
+        self.pose_sub.publish(self.controller_command)
+        rate.sleep()
+
+        
+
+
+if __name__ == '__main__':
+    node = MyFabulousFunnyNode()
+    node.send_random_commands()
+    rospy.spin()
