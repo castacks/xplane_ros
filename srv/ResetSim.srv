@@ -1,0 +1,8 @@
+float64 lat
+float64 lon
+float64 alt
+float64 yaw
+float64 groundspeed
+---
+
+bool success
