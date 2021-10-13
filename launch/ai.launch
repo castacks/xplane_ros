@@ -7,6 +7,8 @@
     <node name="ned_to_viz" pkg="xplane_ros" type="ned_to_viz.py" />
     <node name="xp_rosplane_viz" pkg="xplane_ros" type="rosplane_path_viz.py" />
     <node name="ai_commands" pkg="xplane_ros" type="ai_commands.py" output="screen" />
+    <node name="traffic_sender" pkg="xplane_ros" type="traffic_sender.py" output="screen" />
+    <node name="command_sender" pkg="xplane_ros" type="command_sender.py" output="screen" />
 
 
     <group if="$(arg open_rviz)">

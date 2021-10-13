@@ -15,7 +15,8 @@ class ResetSim():
     def handle_reset(self,req):
         
         posi = [req.lat,req.lon,req.alt,0,0,req.yaw,1]
-        self.reset(posi=posi,groundspeed=req.groundspeed)
+        return self.reset(posi=posi,groundspeed=req.groundspeed)
+
 
     def reset(self,posi,groundspeed = 50):
         
@@ -32,13 +33,9 @@ class ResetSim():
         self.client.sendDREF("sim/flightmodel/position/local_az", 0)
         self.client.sendDREF("sim/flightmodel/position/local_ay", 0)
         
-        self.client.sendDREF("sim/flightmodel/position/beta", 0)
-        self.client.sendDREF("sim/flightmodel/position/alpha", 0)
-        
-        self.client.sendDREF("sim/flightmodel/position/M", 0)
-        self.client.sendDREF("sim/flightmodel/position/N", 0)
-        self.client.sendDREF("sim/flightmodel/position/L", 0)
-        
+        self.client.sendDREF("sim/flightmodel/position/theta", 0)
+        self.client.sendDREF("sim/flightmodel/position/phi", 0)
+                
         self.client.sendDREF("sim/flightmodel/position/P", 0)
         self.client.sendDREF("sim/flightmodel/position/Q", 0)
         self.client.sendDREF("sim/flightmodel/position/R", 0)
@@ -51,3 +48,4 @@ class ResetSim():
         self.client.sendDREF("sim/flightmodel/position/Q_dot", 0)
         self.client.sendDREF("sim/flightmodel/position/R_dot", 0)
 
+        return True

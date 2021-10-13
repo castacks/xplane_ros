@@ -132,6 +132,8 @@ include_directories(
 
 catkin_install_python(PROGRAMS 
     scripts/xplane_ros_wrapper.py 
+    scripts/traffic_sender.py
+    scripts/command_sender.py
     scripts/takeoff.py
     scripts/roll_hold.py
     scripts/ned_to_viz.py

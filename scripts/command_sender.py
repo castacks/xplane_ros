@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 import xpc.xpc as xpc
 
 import rospy
@@ -14,9 +17,9 @@ class CommandSender():
         # Listen on the topic for an control commands from the user
         self.controlSub =  rospy.Subscriber("/xplane/my_control", xplane_msgs.Controls, self.controlCallback)
 
-        self.rosplaneControlSub = rospy.Subscriber("/fixedwing/command", rosflight_msgs.Command, self.rosplaneControlCallback)
+        self.rosplaneControlSub = rospy.Subscriber("/fixedwing/command", rosflight_msgs.Command, self.rosplaneControlCallback)    
 
-    
+
     def poseCallback(self, msg):
         if msg is not None:
             print(msg.el)
@@ -31,6 +34,7 @@ class CommandSender():
         # posi = [40.77465057373047,-79.95907592773438, 381.69171142578125, 0,    0,  90,  1]
         # self.client.sendPOSI(posi, 1)
         if msg is not None:
+
             if msg.x < -1.0 or msg.x > 1.0:
                 msg.x = -998.0
             if msg.y < -1.0 or msg.y > 1.0:
@@ -46,6 +50,18 @@ class CommandSender():
         '''Set the parking brake to on or off
             brake: 0 - OFF; 1 - ON
         '''
-        print("Brakes Off!!")
+        # print("Brakes Off!!")
         self.client.sendDREF("sim/flightmodel/controls/parkbrake", brake)
         
+
+if __name__ == '__main__':
+    # start the interface node
+    rospy.init_node('xplane_ros_command_wrapper', anonymous=True)
+    with xpc.XPlaneConnect(timeout=20000) as client:
+        
+        '''instantiate wrapper object'''
+
+        # trafficSender = TrafficSender(client)
+        commandSender = CommandSender(client)
+
+        rospy.spin() #!/usr/bin/env python3
