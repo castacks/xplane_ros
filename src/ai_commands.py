@@ -6,7 +6,7 @@ import xplane_ros.msg as xplane_msgs
 
 from matplotlib import pyplot as plt
 from traj_x.traj_x import TrajX as TrajX
-from utils import read_traffic_file, to_local_runway_frame
+from xplane_ros_utils.utils import read_traffic_file, to_local_runway_frame
 
 import random
 

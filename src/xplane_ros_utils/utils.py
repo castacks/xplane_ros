@@ -9,6 +9,7 @@ import pandas as pd
 
 
 def to_local_runway_frame(lat1,lon1):
+    print("to_local_runway_frame")
     R1 = [40.774548, -79.959237] ##Runway 08
     R2 = [40.778630, -79.942803] ##Runway 26
     geod = Geodesic.WGS84
@@ -27,7 +28,7 @@ def to_local_runway_frame(lat1,lon1):
     return p[1],-p[0]
 
 def read_traffic_file(path):
-
+    print("read_traffic_file")
     df = pd.read_csv(path, sep = ' ', names = ["Frame","ID","x","y","z","w_x","w_y"])
     counts = df["ID"].value_counts()
     ownship_id = counts.first_valid_index()
