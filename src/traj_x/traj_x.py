@@ -1,6 +1,7 @@
 from time import sleep
 
 
+# MOTION_PRIMITIVES_FILE = '/home/jay/xplane_ros_ws/src/xplane_ros/utils/traj_index_0SI.txt'
 MOTION_PRIMITIVES_FILE = '/home/rbaijal/ROS_WS/xplane_ros_ws/src/xplane_ros/utils/traj_index_0SI.txt'
 MOTION_PRIMITIVES = open(MOTION_PRIMITIVES_FILE, 'r')
 

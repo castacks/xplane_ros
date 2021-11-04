@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+
+
 import xpc.xpc as xpc
 
 import rospy
@@ -9,33 +12,36 @@ class TrafficSender():
     def __init__(self, client):
         #self.client =  xpc.XPlaneConnect()
         self.client = client
-        # Listen on the topic for an control commands from the user
-        
+        self.got_traffic = False
+
+        # Listen on the topic for an traffic commands from the user
+        self.trafficSub =  rospy.Subscriber("/xplane/adsb_traffic", xplane_msgs.Traffic, self.sendTraffic)
+ 
     
-    def sendTraffic(self):
-        print("Sending Traffic!!")
+    def sendTraffic(self, msg):
 
+        num_agents = len(msg.lat)
+        print("Sending " + str(num_agents) + " Traffic!!")
 
-        # self.client.sendDREF("sim/multiplayer/position/plane2_lat",40.77465057373047)
-        # self.client.sendDREF("sim/multiplayer/position/plane2_lon", -79.95907592773438)
-        # self.client.sendDREF("sim/multiplayer/position/plane2_el", 381.69171142578125)
+        self.got_traffic = True
+        for agent in range(num_agents):
+            posi = [msg.lat[agent], msg.lon[agent], msg.alt[agent], 0,    0,   msg.yaw[agent],  0]
+            print(msg.yaw[agent])
+                    # self.client.sendDREF("sim/operation/override/override_TCAS",0)
+            self.client.sendPOSI(posi, agent+1) #zero index plus ownship
 
-        # self.client.sendDREF("sim/multiplayer/position/plane2_the",0)
-        # self.client.sendDREF("sim/multiplayer/position/plane2_phi",0)
-        # self.client.sendDREF("sim/multiplayer/position/plane2_psi",0)
+            # self.client.sendDREF("sim/multiplayer/position/plane1_the", 90.0)
 
-        # self.client.sendDREF("sim/multiplayer/position/plane1_v_x",10)
-        # self.client.sendDREF("sim/multiplayer/position/plane2_v_y",0)
-        # self.client.sendDREF("sim/multiplayer/position/plane2_v_z",0)
+    def check_traffic(self):
+        return self.got_traffic
+     
+if __name__ == '__main__':
+    # start the interface node
+    rospy.init_node('xplane_ros_traffic_wrapper', anonymous=True)
+    with xpc.XPlaneConnect(timeout=20000) as client:
+        
+        '''instantiate wrapper object'''
 
-        # posi = [40.77465057373047,-79.95907592773438, 381.69171142578125, 0,    0,   0,  1]
-        # self.client.sendPOSI(posi, 1)
+        trafficSender = TrafficSender(client)
 
-
-        drefs = []
-        drefs.append("sim/multiplayer/position/plane1_x")
-        drefs.append("sim/multiplayer/position/plane1_y")
-        drefs.append("sim/multiplayer/position/plane1_z")
-
-        data = self.client.getDREFs(drefs)
-        print(data)
+        rospy.spin() #!/usr/bin/env python3

@@ -342,3 +342,4 @@ class StateReader:
         pose.position.x = (pose.position.x - init.position.x)
         pose.position.y = (pose.position.y - init.position.y)
         pose.position.z = (pose.position.z - init.position.z)
+

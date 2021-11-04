@@ -64,9 +64,9 @@ add_message_files(
 
 ## Generate services in the 'srv' folder
 add_service_files(
-  FILES
-  ResetSim.srv
-)
+   FILES
+   ResetSim.srv
+ )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -132,6 +132,8 @@ include_directories(
 
 catkin_install_python(PROGRAMS 
     scripts/xplane_ros_wrapper.py 
+    scripts/traffic_sender.py
+    scripts/command_sender.py
     scripts/takeoff.py
     scripts/roll_hold.py
     scripts/ned_to_viz.py

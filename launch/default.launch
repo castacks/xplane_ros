@@ -7,6 +7,8 @@
     <node name="xplane_wrapper" pkg="xplane_ros" type="xplane_ros_wrapper.py" output="screen" />
     <node name="ned_to_viz" pkg="xplane_ros" type="ned_to_viz.py" />
     <node name="xp_rosplane_viz" pkg="xplane_ros" type="rosplane_path_viz.py" />
+    <node name="traffic_sender" pkg="xplane_ros" type="traffic_sender.py" output="screen" />
+    <node name="command_sender" pkg="xplane_ros" type="command_sender.py" output="screen" />
 
     <group if="$(arg open_rviz)">
         <node type="rviz" name="rviz" pkg="rviz" args="-d $(find xplane_ros)/rviz/default.rviz" />
@@ -16,6 +18,7 @@
     <group if="$(arg pattern_following)">
         <include file="$(find rosplane_sim)/launch/xplane_fw.launch" />
     </group>
+    <!-- <node name="xplane_takeoff" pkg="xplane_ros" type="takeoff.py" output="screen" /> -->
 
     <group if="$(arg rosplane_tuner)">
         <include file="$(find xplane_ros)/launch/rosplane_tuner.launch" />
