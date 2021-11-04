@@ -26,7 +26,7 @@ class XPlaneRosWrapper:
             # self.stateReader.control_update()
             
             while not rospy.is_shutdown():
-                print("pub2")
+                print("XPlaneROS wrapper is Running")
 
                 self.stateReader.sensor_update2()
                 rate.sleep()

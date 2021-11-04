@@ -70,7 +70,7 @@ class AICNode:
             plt.plot(x,y,'*',color='r')
             try:
                 for agent in self.curr_traffic:
-                    print(agent)
+                    print("Agent : ", agent)
                     plt.plot(self.curr_traffic[agent]['x'],self.curr_traffic[agent]['y'],"*",color='k')
             except:
                 print("No Traffic")
@@ -91,7 +91,7 @@ class AICNode:
         self.controller_command.Va_c = float(command[0])
         self.controller_command.phi_c = float(command[1])
         self.controller_command.vh_c = float(command[2])
-        print("Va",float(command[0]),"Roll",float(command[1]) ,"VV",float(command[2]))
+        # print("Va",float(command[0]),"Roll",float(command[1]) ,"VV",float(command[2]))
     
     def send_custom_commands(self):
         '''send custom commands for debug'''
@@ -144,7 +144,8 @@ class AICNode:
 if __name__ == '__main__':
     rospy.init_node('ai_commands', anonymous=True)
     print("AI Commands Initiated")
-    path ='/home/jay/xplane_ros_ws/src/xplane_ros/utils/304.txt'
+    # path ='/home/jay/xplane_ros_ws/src/xplane_ros/utils/304.txt'
+    path ='/home/rbaijal/ROS_WS/xplane_ros_ws/src/xplane_ros/utils/304.txt'
     aicnode = AICNode(traffic_path = path)
     # time.sleep(5)
     aicnode.reset_sim_client()
