@@ -187,8 +187,12 @@ In case you want to try tuning some of the control loops while following the pat
 Press the `Refresh` button incase you don't see anything. 
 After that the relevant config parameters should be visible once you click on `fixedwing/autopilot` (for PID controls) and `fixedwing/pathfollower` (for vector field parameters).
 
-![TakeOff](images/simple_takeoff_PD.png)
-![Pattern](images/xplane_viz_yellow_runway.png)
+<!-- ![TakeOff](images/simple_takeoff_PD.png) -->
+<img src="https://github.com/castacks/xplane_ros/blob/main/images/simple_takeoff_PD.png" alt="Takeoff"
+	title="Takeoff" width="50%"/> 
+<!-- ![Pattern](images/xplane_viz_yellow_runway.png) -->
+<img src="https://github.com/castacks/xplane_ros/blob/main/images/xplane_viz_yellow_runway.png" alt="Pattern"
+	title="Pattern" width="50%"/> 
 
 # Tuning ROSplane Parameters 
 We have tuned the parameters for Cessna_172 (the default aircraft in XPlane) but feel free to try it out for other aircraft yourself.  
@@ -209,3 +213,16 @@ NOTE : The control surfaces correponding to the unticked boxes will be defaulted
 Henceforth, you should be able to experiment with other control loops like `pitch`, `heading`, `throttle`, etc (each corresponding to a function in `controller_base.cpp` and `controller_example.cpp` in `rosplane`).   
 
 For some more idea about what each code does, head over [here](https://bitbucket.org/castacks/xplane_ros/src/master/scripts/).
+
+# Citation
+```
+@misc{baijal_patrikar_moon_scherer_oh_2021,
+  title={XPlaneROS : ROS Wrapper for Autonomous Fixed Wing Applications},
+  url={https://kilthub.cmu.edu/articles/software/XPlaneROS_ROS_Wrapper_for_Autonomous_Fixed_Wing_Applications/16589924},  
+  publisher={Carnegie Mellon University},
+  author={Baijal, Rohan and Patrikar, Jay and Moon, Brady and Scherer, Sebastian and Oh, Jean},
+  year={2021},
+  month={Sep},
+  DOI={10.1184/R1/16589924}
+}
+```
